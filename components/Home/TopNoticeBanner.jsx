@@ -50,76 +50,67 @@ export default function TopNoticeBanner() {
   return (
     <AnimatePresence>
       {visible && (
-        <div
-          className="relative z-[70] bg-black/40 backdrop-blur-xl border-b border-white/5 overflow-hidden"
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -50, opacity: 0 }}
+          className="relative z-[40] bg-[var(--card)] border-b border-[var(--border)] shadow-sm overflow-hidden"
         >
-          {/* DYNAMIC BACKGROUND GLOW */}
-          <div
-            className="absolute inset-0 transition-colors duration-500"
-            style={{ backgroundColor: banner.glow }}
-          />
+          {/* ⚡ Tactical Accent Line */}
+          <div className="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-30" />
 
-          <div className="max-w-7xl mx-auto px-4 py-1.5 sm:py-2 flex items-center justify-between gap-4 relative">
-            <Link
-              href={banner.link}
-              className="flex-1 flex items-center justify-center sm:justify-start gap-4 group cursor-pointer"
+          <div className="max-w-7xl mx-auto px-4 h-10 flex items-center justify-between gap-6">
+            
+            {/* 🏷️ Status Tag */}
+            <div className="hidden md:flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/[0.03] border border-white/5">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-500/80">Live Now</span>
+            </div>
+
+            {/* 📣 Rotating Message */}
+            <Link 
+              href={banner.link} 
+              className="flex-1 flex items-center justify-center gap-3 group transition-all"
             >
-              {/* STATUS INDICATOR */}
-              <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Live</span>
-              </div>
-
-              {/* CONTENT AREA */}
-              <div className="flex-1 flex items-center gap-3 overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={banner.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 w-full"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Icon size={14} className="text-amber-500" />
-                      <span className="text-xs font-black italic uppercase tracking-tighter text-white">
-                        {banner.title}
-                      </span>
-                    </div>
-                    <span className="hidden sm:block w-[1px] h-3 bg-white/10" />
-                    <span className="text-[10px] sm:text-xs font-bold text-white/40 group-hover:text-white transition-colors truncate uppercase tracking-widest leading-none">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={banner.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center gap-3 text-center"
+                >
+                  <div className="w-6 h-6 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-black transition-colors">
+                    <Icon size={12} strokeWidth={2.5} />
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--foreground)] italic">
+                      {banner.title}:
+                    </span>
+                    <span className="text-[10px] md:text-xs font-bold text-[var(--muted)] group-hover:text-[var(--foreground)] transition-colors uppercase tracking-[0.05em]">
                       {banner.subtitle}
                     </span>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* CTA LINK */}
-              <div className="hidden md:flex items-center gap-2 group/cta">
-                <span className="text-[11px] font-black italic uppercase tracking-[0.2em] text-amber-500">
-                  {banner.cta}
-                </span>
-                <div className="w-6 h-6 rounded-full bg-amber-500/10 flex items-center justify-center group-hover/cta:bg-amber-500 transition-all">
-                  <ArrowRight size={10} className="text-amber-500 group-hover/cta:text-black transition-colors" />
-                </div>
-              </div>
+                  </div>
+                  <ArrowRight size={10} className="text-[var(--accent)] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </motion.div>
+              </AnimatePresence>
             </Link>
 
-            {/* CLOSE ACTION */}
+            {/* ✖️ Close Action */}
             <button
               onClick={() => {
                 setVisible(false);
                 localStorage.setItem(STORAGE_KEY, "true");
               }}
-              className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/20 hover:text-white transition-all group"
+              className="w-7 h-7 rounded-lg bg-[var(--foreground)]/[0.03] hover:bg-[var(--foreground)]/[0.08] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] transition-all border border-[var(--border)]"
             >
-              <X size={14} />
+              <X size={12} strokeWidth={3} />
             </button>
           </div>
-
-
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
