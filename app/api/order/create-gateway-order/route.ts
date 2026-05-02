@@ -95,16 +95,25 @@ async function resolvePrice(
 
   if (userType !== "owner") {
     await connectDB();
-    const pricingConfig = await PricingConfig.findOne({ userType }).lean();
+    const pricingConfig = (await PricingConfig.findOne({ userType }).lean()) as any;
 
     if (pricingConfig) {
-      const fixed = pricingConfig.overrides?.find(
-        (o: any) =>
-          o.gameSlug === gameSlug && o.itemSlug === itemSlug
+      const gameOverride = pricingConfig.gameOverrides?.find((go: any) => go.gameSlug === gameSlug);
+      if (gameOverride && gameOverride.inStock === false) {
+        throw new Error("This game is currently out of stock");
+      }
+
+      const override = pricingConfig.overrides?.find(
+        (o: any) => o.gameSlug === gameSlug && o.itemSlug === itemSlug
       );
 
-      if (fixed?.fixedPrice != null) {
-        price = Number(fixed.fixedPrice);
+      if (override && override.inStock === false) {
+        throw new Error("This item is currently out of stock");
+      }
+
+      // Calculate Price
+      if (override?.useOverride && override?.fixedPrice != null) {
+        price = Number(override.fixedPrice);
       } else if (pricingConfig.slabs?.length) {
         const slab = pricingConfig.slabs.find(
           (s: any) => price >= s.min && price < s.max

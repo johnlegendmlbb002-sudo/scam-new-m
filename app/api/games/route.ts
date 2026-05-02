@@ -72,6 +72,22 @@ export async function GET() {
 
     const data = await response.json();
 
+    /* ================= APPLY OVERRIDES (STOCK) ================= */
+    const { connectDB } = await import("@/lib/mongodb");
+    const PricingConfig = (await import("@/models/PricingConfig")).default;
+    await connectDB();
+    const pricing = await PricingConfig.findOne({ userType: "user" }).lean() as any;
+
+    if (pricing?.gameOverrides?.length) {
+      data.data.games = data.data.games.map((g: any) => {
+        const override = pricing.gameOverrides.find((go: any) => go.gameSlug === g.gameSlug);
+        if (override && override.inStock === false) {
+          return { ...g, gameAvailablity: false };
+        }
+        return g;
+      });
+    }
+
     /* ================= NORMALIZE GAME ================= */
     const normalizeGame = (game: any) => {
       let updatedGame = { ...game };

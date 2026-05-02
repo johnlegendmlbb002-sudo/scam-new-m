@@ -38,6 +38,7 @@ export default function ItemGrid({
             whileHover={{ y: -5, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
+              if (item.itemAvailablity === false) return;
               setActiveItem(item);
               buyPanelRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -52,8 +53,16 @@ export default function ItemGrid({
                 ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
                 : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40"
               }
+              ${item.itemAvailablity === false ? "opacity-40 grayscale cursor-not-allowed" : "cursor-pointer"}
             `}
           >
+            {item.itemAvailablity === false && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
+                <span className="bg-red-500 text-white text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full shadow-lg">
+                  Out of Stock
+                </span>
+              </div>
+            )}
             {/* Header: Name & Discount */}
             <div className="relative z-10 flex flex-col gap-2">
               <div className="flex justify-between items-start gap-2">

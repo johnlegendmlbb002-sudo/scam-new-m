@@ -35,8 +35,23 @@ const PricingConfigSchema = new mongoose.Schema(
           required: true,
           min: 0,
         },
+        useOverride: {
+          type: Boolean,
+          default: false,
+        },
+        inStock: {
+          type: Boolean,
+          default: true,
+        },
       },
     ],
+    /* ================= GAME STATUS OVERRIDES ================= */
+    gameOverrides: [
+      {
+        gameSlug: { type: String, required: true },
+        inStock: { type: Boolean, default: true },
+      }
+    ]
   },
   { timestamps: true }
 );

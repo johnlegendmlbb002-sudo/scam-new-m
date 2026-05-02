@@ -61,18 +61,24 @@ export default function BuyPanel({
 
       <motion.button
         onClick={() => onBuy(activeItem)}
-        disabled={redirecting}
+        disabled={redirecting || activeItem.itemAvailablity === false}
         whileHover={{ scale: 1.01, y: -2 }}
         whileTap={{ scale: 0.98 }}
         className={`w-full py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all relative overflow-hidden flex items-center justify-center gap-3 shadow-lg
           ${
-            redirecting
+            redirecting || activeItem.itemAvailablity === false
               ? "bg-[var(--border)] text-[var(--muted)] cursor-not-allowed"
               : "bg-[var(--accent)] text-black"
           }`}
       >
-        <span className="relative z-10">{redirecting ? "Processing..." : "Confirm Purchase"}</span>
-        {!redirecting && <FiArrowRight className="relative z-10" size={14} />}
+        <span className="relative z-10">
+          {redirecting 
+            ? "Processing..." 
+            : activeItem.itemAvailablity === false 
+              ? "Out of Stock" 
+              : "Confirm Purchase"}
+        </span>
+        {!redirecting && activeItem.itemAvailablity !== false && <FiArrowRight className="relative z-10" size={14} />}
       </motion.button>
     </motion.div>
   );

@@ -35,6 +35,7 @@ export async function GET(req) {
       data: {
         slabs: pricing?.slabs || [],
         overrides: pricing?.overrides || [],
+        gameOverrides: pricing?.gameOverrides || [],
       },
     });
   } catch (err) {
@@ -55,7 +56,7 @@ export async function PATCH(req) {
     await verifyAdmin(req);
 
     const body = await req.json();
-    let { userType, slabs = [], overrides = [] } = body;
+    let { userType, slabs = [], overrides = [], gameOverrides = [] } = body;
 
     if (!userType) {
       return NextResponse.json(
@@ -127,14 +128,30 @@ export async function PATCH(req) {
         gameSlug: o.gameSlug,
         itemSlug: o.itemSlug,
         fixedPrice: o.fixedPrice,
+        useOverride: !!o.useOverride,
+        inStock: o.inStock !== false, // default true
       });
     }
 
     const mergedOverrides = Array.from(overrideMap.values());
 
+    /* ================= MERGE GAME OVERRIDES ================= */
+    const gameOverrideMap = new Map();
+    for (const go of existing.gameOverrides || []) {
+      gameOverrideMap.set(go.gameSlug, go);
+    }
+    for (const go of gameOverrides) {
+      gameOverrideMap.set(go.gameSlug, {
+        gameSlug: go.gameSlug,
+        inStock: go.inStock !== false,
+      });
+    }
+    const mergedGameOverrides = Array.from(gameOverrideMap.values());
+
     /* ================= SAVE ================= */
     existing.slabs = slabs;
     existing.overrides = mergedOverrides;
+    existing.gameOverrides = mergedGameOverrides;
 
     await existing.save();
 

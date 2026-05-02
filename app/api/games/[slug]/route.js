@@ -208,8 +208,14 @@ export async function GET(req, { params }) {
       }).lean();
     }
 
-    /* ===== APPLY PRICING ===== */
+    /* ===== APPLY PRICING & STOCK ===== */
     const gameSlug = data.data.gameSlug;
+    const gameOverride = pricingConfig?.gameOverrides?.find(go => go.gameSlug === gameSlug);
+    
+    // If game is out of stock in config, hide it or mark it
+    if (gameOverride && gameOverride.inStock === false) {
+      data.data.gameAvailablity = false;
+    }
 
     data.data.itemId = data.data.itemId
       .filter((item) => {
@@ -225,12 +231,11 @@ export async function GET(req, { params }) {
         let finalPrice = basePrice;
 
         const override = pricingConfig?.overrides?.find(
-          (o) =>
-            o.gameSlug === gameSlug &&
-            o.itemSlug === item.itemSlug
+          (o) => o.gameSlug === gameSlug && o.itemSlug === item.itemSlug
         );
 
-        if (override?.fixedPrice != null) {
+        // Calculate Price
+        if (override?.useOverride && override?.fixedPrice != null) {
           finalPrice = override.fixedPrice;
         } else {
           const slab = pricingConfig?.slabs?.find(
@@ -241,9 +246,19 @@ export async function GET(req, { params }) {
           }
         }
 
+        // Apply Stock Status
+        let itemAvail = item.itemAvailablity;
+        if (override && override.inStock === false) {
+          itemAvail = false;
+        }
+        if (gameOverride && gameOverride.inStock === false) {
+          itemAvail = false;
+        }
+
         return {
           ...item,
           sellingPrice: Math.ceil(finalPrice),
+          itemAvailablity: itemAvail
         };
       });
 
