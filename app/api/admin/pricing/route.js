@@ -1,66 +1,13 @@
-import { connectDB } from "@/lib/mongodb";
 import PricingConfig from "@/models/PricingConfig";
-import jwt from "jsonwebtoken";
+import { verifyAdmin } from "@/lib/adminAuth";
 import { NextResponse } from "next/server";
-
-/* ================= AUTH HELPERS ================= */
-const requireOwner = (req) => {
-  const auth = req.headers.get("authorization");
-
-  if (!auth || !auth.startsWith("Bearer ")) {
-    return { error: "Unauthorized", status: 401 };
-  }
-
-  try {
-    const token = auth.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (decoded.userType !== "owner") {
-      return { error: "Forbidden", status: 403 };
-    }
-
-    return { decoded };
-  } catch {
-    return { error: "Invalid token", status: 401 };
-  }
-};
-
-const requireAdminMemberOwner = (req) => {
-  const auth = req.headers.get("authorization");
-
-  if (!auth || !auth.startsWith("Bearer ")) {
-    return { error: "Unauthorized", status: 401 };
-  }
-
-  try {
-    const token = auth.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // owner, admin, member can VIEW pricing
-    if (!["owner", "admin", "member"].includes(decoded.userType)) {
-      return { error: "Forbidden", status: 403 };
-    }
-
-    return { decoded };
-  } catch {
-    return { error: "Invalid token", status: 401 };
-  }
-};
 
 /* =================================================
    GET → Fetch pricing (SEPARATE FOR ALL ROLES)
    ================================================= */
 export async function GET(req) {
   try {
-    await connectDB();
-
-    const authCheck = requireAdminMemberOwner(req);
-    if (authCheck.error) {
-      return NextResponse.json(
-        { success: false, message: authCheck.error },
-        { status: authCheck.status }
-      );
-    }
+    await verifyAdmin(req);
 
     const { searchParams } = new URL(req.url);
     const userType = searchParams.get("userType");
@@ -93,8 +40,8 @@ export async function GET(req) {
   } catch (err) {
     console.error("GET pricing error:", err);
     return NextResponse.json(
-      { success: false, message: "Server error" },
-      { status: 500 }
+      { success: false, message: err.message || "Server error" },
+      { status: err.status || 500 }
     );
   }
 }
@@ -105,15 +52,7 @@ export async function GET(req) {
    ================================================= */
 export async function PATCH(req) {
   try {
-    await connectDB();
-
-    const authCheck = requireOwner(req);
-    if (authCheck.error) {
-      return NextResponse.json(
-        { success: false, message: authCheck.error },
-        { status: authCheck.status }
-      );
-    }
+    await verifyAdmin(req);
 
     const body = await req.json();
     let { userType, slabs = [], overrides = [] } = body;
@@ -175,17 +114,14 @@ export async function PATCH(req) {
     }
 
     /* ================= MERGE OVERRIDES ================= */
-    // key = gameSlug::itemSlug
     const overrideMap = new Map();
 
-    // keep existing overrides
     for (const o of existing.overrides || []) {
       if (o.gameSlug && o.itemSlug) {
         overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, o);
       }
     }
 
-    // apply incoming overrides (replace or add)
     for (const o of overrides) {
       overrideMap.set(`${o.gameSlug}::${o.itemSlug}`, {
         gameSlug: o.gameSlug,
@@ -200,15 +136,7 @@ export async function PATCH(req) {
     existing.slabs = slabs;
     existing.overrides = mergedOverrides;
 
-    try {
-      await existing.save();
-    } catch (saveError) {
-      console.error(`Database save error for userType ${userType}:`, saveError);
-      return NextResponse.json(
-        { success: false, message: saveError.message || "Database save failed" },
-        { status: 400 } // Likely a validation or constraint error
-      );
-    }
+    await existing.save();
 
     return NextResponse.json({
       success: true,
@@ -218,8 +146,8 @@ export async function PATCH(req) {
   } catch (err) {
     console.error("PATCH pricing error:", err);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
-      { status: 500 }
+      { success: false, message: err.message || "Server error" },
+      { status: err.status || 500 }
     );
   }
 }

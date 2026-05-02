@@ -1,9 +1,10 @@
 import { connectDB } from "@/lib/mongodb";
 import SupportQuery from "@/models/SupportQuery";
+import User from "@/models/User";
 import jwt from "jsonwebtoken";
 
 /* ================= AUTH (ADMIN ONLY) ================= */
-function verifyAdmin(req) {
+async function verifyAdmin(req) {
   const auth = req.headers.get("authorization");
   if (!auth?.startsWith("Bearer ")) {
     throw { status: 401, message: "Unauthorized" };
@@ -12,7 +13,9 @@ function verifyAdmin(req) {
   const token = auth.split(" ")[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  if (decoded.userType !== "admin" && decoded.userType !== "owner") {
+  const user = await User.findById(decoded.userId).select("userType");
+
+  if (!user || (user.userType !== "admin" && user.userType !== "owner")) {
     throw { status: 403, message: "Forbidden" };
   }
 
@@ -23,7 +26,7 @@ function verifyAdmin(req) {
 export async function GET(req) {
   try {
     await connectDB();
-    verifyAdmin(req);
+    await verifyAdmin(req);
 
     const { searchParams } = new URL(req.url);
 
@@ -40,6 +43,7 @@ export async function GET(req) {
         { phone: { $regex: search, $options: "i" } },
         { message: { $regex: search, $options: "i" } },
         { type: { $regex: search, $options: "i" } },
+        { orderId: { $regex: search, $options: "i" } },
       ];
     }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { JSX, useState } from "react";
+import { JSX, useState, useEffect } from "react";
 import {
   FaPhoneAlt,
   FaInstagram,
@@ -76,6 +76,8 @@ const FAQS = [
 export default function QueryTab() {
   const [queryType, setQueryType] = useState("");
   const [queryMessage, setQueryMessage] = useState("");
+  const [phone, setPhone] = useState("");
+  const [orderId, setOrderId] = useState("");
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -99,9 +101,10 @@ export default function QueryTab() {
         },
         body: JSON.stringify({
           email: storedEmail || null,
-          phone: storedPhone || null,
+          phone: phone || storedPhone || null,
           type: queryType,
           message: queryMessage,
+          orderId: orderId || null,
         }),
       });
 
@@ -120,6 +123,11 @@ export default function QueryTab() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    const storedPhone = localStorage.getItem("phone");
+    if (storedPhone) setPhone(storedPhone);
+  }, []);
 
   return (
     <div className="space-y-6 pb-6">
@@ -191,6 +199,38 @@ export default function QueryTab() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Enter your phone"
+                    className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
+                               focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
+                               font-bold text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">
+                    Order ID <span className="text-[10px] lowercase italic opacity-60">(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={orderId}
+                    onChange={(e) => setOrderId(e.target.value)}
+                    placeholder="e.g. ORD12345"
+                    className="w-full p-4 rounded-xl border border-[var(--border)] bg-[var(--background)] 
+                               focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all
+                               font-bold text-sm"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] ml-1">Description</label>
                 <textarea
@@ -204,7 +244,7 @@ export default function QueryTab() {
               </div>
 
               <button
-                disabled={!queryType || !queryMessage.trim() || isSubmitting}
+                disabled={!queryType || !queryMessage.trim() || !phone.trim() || isSubmitting}
                 onClick={handleSubmit}
                 className="w-full py-4 rounded-xl bg-[var(--accent)] text-white font-bold uppercase tracking-wider text-xs
                            flex items-center justify-center gap-2 shadow-lg shadow-[var(--accent)]/20

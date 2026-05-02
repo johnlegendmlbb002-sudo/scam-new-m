@@ -113,13 +113,13 @@ export default function WalletTab() {
         <div className="space-y-8 animate-in fade-in duration-500">
 
             {/* TOTAL SYSTEM BALANCE STAT */}
-            <div className="p-6 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm flex items-center justify-between group hover:border-[var(--accent)] transition-all">
-                <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest">Total System Liability</p>
-                    <h2 className="text-3xl font-black text-[var(--accent)] tabular-nums">₹{totalWalletCredit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</h2>
+            <div className="p-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm flex items-center justify-between group hover:border-[var(--accent)] transition-all">
+                <div className="space-y-0.5">
+                    <p className="text-[9px] font-bold text-[var(--muted)] uppercase tracking-widest">Total System Liability</p>
+                    <h2 className="text-2xl font-black text-[var(--accent)] tabular-nums">₹{totalWalletCredit.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</h2>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-transform">
-                    <FiActivity size={24} />
+                <div className="w-10 h-10 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] group-hover:scale-110 transition-transform">
+                    <FiActivity size={20} />
                 </div>
             </div>
 
@@ -190,23 +190,23 @@ export default function WalletTab() {
 
                     {/* PAGINATION */}
                     {totalPages > 1 && (
-                        <div className="flex items-center justify-center gap-2 pt-4">
+                        <div className="flex items-center justify-center gap-2 pt-3">
                             <button
                                 onClick={() => setPage(p => Math.max(1, p - 1))}
                                 disabled={page === 1}
-                                className="p-2 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all"
+                                className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all"
                             >
-                                <FiChevronLeft />
+                                <FiChevronLeft size={12} />
                             </button>
-                            <span className="text-xs font-bold text-[var(--muted)]">
+                            <span className="text-[10px] font-bold text-[var(--muted)]">
                                 {page} / {totalPages}
                             </span>
                             <button
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                 disabled={page === totalPages}
-                                className="p-2 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all"
+                                className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white disabled:opacity-20 transition-all"
                             >
-                                <FiChevronRight />
+                                <FiChevronRight size={12} />
                             </button>
                         </div>
                     )}
@@ -297,16 +297,16 @@ export default function WalletTab() {
                 <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm">
                     <table className="w-full text-left text-sm">
                         <thead className="bg-[var(--background)] border-b border-[var(--border)]">
-                            <tr>
-                                <th className="px-6 py-4 font-semibold">TID</th>
-                                <th className="px-6 py-4 font-semibold">User ID</th>
-                                <th className="px-6 py-4 font-semibold">Type</th>
-                                <th className="px-6 py-4 font-semibold text-right">Amount</th>
-                                <th className="px-6 py-4 font-semibold text-right">Balance After</th>
-                                <th className="px-6 py-4 font-semibold">Status</th>
-                                <th className="px-6 py-4 font-semibold">Description</th>
-                                <th className="px-6 py-4 font-semibold">Date</th>
-                                <th className="px-6 py-4 font-semibold text-center">Action</th>
+                            <tr className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)]">
+                                <th className="px-4 py-3 font-semibold">TID</th>
+                                <th className="px-4 py-3 font-semibold">User ID</th>
+                                <th className="px-4 py-3 font-semibold">Type</th>
+                                <th className="px-4 py-3 font-semibold text-right">Amount</th>
+                                <th className="px-4 py-3 font-semibold text-right">Balance</th>
+                                <th className="px-4 py-3 font-semibold">Status</th>
+                                <th className="px-4 py-3 font-semibold">Description</th>
+                                <th className="px-4 py-3 font-semibold">Date</th>
+                                <th className="px-4 py-3 font-semibold text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[var(--border)]">

@@ -16,7 +16,8 @@ import {
   ChevronRight,
   ChevronDown,
   Filter,
-  Inbox
+  Inbox,
+  Hash
 } from "lucide-react";
 
 export default function SupportQueriesTab() {
@@ -183,7 +184,7 @@ export default function SupportQueriesTab() {
             >
               {queries.map((q, idx) => {
                 const status = getStatus(q.status);
-                const meta = statusMeta[status];
+                const meta = statusMeta[status] || statusMeta.open;
 
                 return (
                   <motion.div
@@ -208,10 +209,15 @@ export default function SupportQueriesTab() {
                         <span className="text-[9px] font-medium text-[var(--muted)]/60 truncate">
                           {new Date(q.createdAt).toLocaleDateString()}
                         </span>
+                        {q.orderId && (
+                          <span className="flex items-center gap-1 text-[9px] font-bold text-[var(--accent)] uppercase tracking-tighter">
+                            <Hash size={10} /> {q.orderId}
+                          </span>
+                        )}
                       </div>
 
                       <h4 className="text-sm font-bold text-[var(--foreground)] truncate group-hover:text-[var(--accent)]">
-                        {q.email || "Unknown User"}
+                        {q.email || q.phone || "Unknown User"}
                       </h4>
 
                       <p className="text-[11px] text-[var(--muted)]/60 truncate mt-0.5">
@@ -290,23 +296,26 @@ export default function SupportQueriesTab() {
                 </button>
               </div>
 
-              <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <DetailBlock label="Email" value={activeQuery.email || "N/A"} icon={<Mail size={12} />} />
-                  <DetailBlock label="Phone" value={activeQuery.phone || "N/A"} icon={<Phone size={12} />} />
-                  <DetailBlock label="Type" value={activeQuery.type} emphasize icon={<MessageSquare size={12} />} />
-                  <DetailBlock label="Date" value={new Date(activeQuery.createdAt).toLocaleString()} icon={<Clock size={12} />} />
+              <div className="p-4 space-y-4 max-h-[75vh] overflow-y-auto">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                  <DetailBlock label="Email" value={activeQuery.email || "N/A"} icon={<Mail size={10} />} />
+                  <DetailBlock label="Phone" value={activeQuery.phone || "N/A"} icon={<Phone size={10} />} />
+                  <DetailBlock label="Order ID" value={activeQuery.orderId || "N/A"} emphasize={!!activeQuery.orderId} icon={<Hash size={10} />} />
+                  <DetailBlock label="Type" value={activeQuery.type} emphasize icon={<MessageSquare size={10} />} />
+                  <div className="col-span-2">
+                    <DetailBlock label="Date" value={new Date(activeQuery.createdAt).toLocaleString()} icon={<Clock size={10} />} />
+                  </div>
                 </div>
 
-                <div className="space-y-2 p-4 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
-                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase">Message</p>
-                  <p className="text-sm font-medium leading-relaxed text-[var(--foreground)]">
+                <div className="space-y-1 p-3 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)]">
+                  <p className="text-[9px] font-bold text-[var(--muted)]/40 uppercase">Message</p>
+                  <p className="text-[13px] font-medium leading-snug text-[var(--foreground)]">
                     {activeQuery.message}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-4 border-t border-[var(--border)]">
-                  <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase ml-1">Status</p>
+                <div className="space-y-2 pt-3 border-t border-[var(--border)]">
+                  <p className="text-[9px] font-bold text-[var(--muted)]/40 uppercase ml-1">Status</p>
                   <CustomDropdown
                     value={getStatus(activeQuery.status)}
                     onChange={(newStatus) => {
@@ -401,11 +410,11 @@ function CustomDropdown({ value, onChange, options, disabled }) {
 
 function DetailBlock({ label, value, emphasize, icon }) {
   return (
-    <div className="space-y-0.5">
-      <p className="text-[10px] font-bold text-[var(--muted)]/40 uppercase flex items-center gap-1.5">
+    <div className="space-y-0">
+      <p className="text-[9px] font-bold text-[var(--muted)]/40 uppercase flex items-center gap-1.5">
         <span className="text-[var(--accent)]">{icon}</span> {label}
       </p>
-      <p className={`text-sm font-bold ${emphasize ? "text-[var(--accent)] capitalize italic" : "text-[var(--foreground)]"}`}>
+      <p className={`text-[13px] font-bold truncate ${emphasize ? "text-[var(--accent)] capitalize italic" : "text-[var(--foreground)]"}`}>
         {value}
       </p>
     </div>

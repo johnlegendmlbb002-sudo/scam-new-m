@@ -1,25 +1,5 @@
-import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
-import jwt from "jsonwebtoken";
-
-/* =========================
-   AUTH HELPER
-========================= */
-function verifyOwner(req) {
-  const auth = req.headers.get("authorization");
-  if (!auth?.startsWith("Bearer ")) {
-    throw { status: 401, message: "Unauthorized" };
-  }
-
-  const token = auth.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  if (decoded.userType !== "owner") {
-    throw { status: 403, message: "Forbidden" };
-  }
-
-  return decoded;
-}
+import { verifyAdmin } from "@/lib/adminAuth";
 
 /* =========================
    GET ALL ORDERS (OWNER)
@@ -27,8 +7,7 @@ function verifyOwner(req) {
 ========================= */
 export async function GET(req) {
   try {
-    await connectDB();
-    verifyOwner(req);
+    await verifyAdmin(req);
 
     /* ================= QUERY PARAMS ================= */
     const { searchParams } = new URL(req.url);
@@ -110,8 +89,7 @@ export async function GET(req) {
 ========================= */
 export async function PATCH(req) {
   try {
-    await connectDB();
-    verifyOwner(req);
+    await verifyAdmin(req);
 
     const { orderId, status } = await req.json();
 

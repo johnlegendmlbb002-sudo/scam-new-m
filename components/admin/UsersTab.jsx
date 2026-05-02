@@ -398,39 +398,40 @@ export default function UsersTab() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-lg bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1110] flex flex-col"
             >
-              <div className="p-6 border-b border-[var(--border)]">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-lg font-bold text-[var(--foreground)]">User Details</h3>
+              <div className="p-4 border-b border-[var(--border)]">
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-black uppercase italic tracking-tighter text-[var(--foreground)]">User Details</h3>
                   <button
                     onClick={() => setSelectedUser(null)}
-                    className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-red-500/10 transition-all outline-none"
+                    className="w-7 h-7 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--muted)]/40 hover:text-[var(--foreground)] hover:bg-red-500/20 transition-all font-bold"
                   >
-                    <X size={18} />
+                    <X size={16} />
                   </button>
                 </div>
-
-                <div className="flex items-center gap-4">
+ 
+                <div className="flex items-center gap-3">
                   <div className="relative">
-                    <Avatar user={selectedUser} size="lg" />
+                    <Avatar user={selectedUser} size="md" />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-base font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className={`px-2 py-0.5 rounded-md border text-[10px] font-semibold capitalize ${getRoleClass(selectedUser.userType)}`}>
+                    <h4 className="text-sm font-bold text-[var(--foreground)] truncate">{selectedUser.name}</h4>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`px-2 py-0.5 rounded-md border text-[9px] font-semibold capitalize ${getRoleClass(selectedUser.userType)}`}>
                         {selectedUser.userType}
                       </span>
-                      <span className="text-[11px] text-[var(--muted)] font-mono">{selectedUser.userId}</span>
+                      <span className="text-[10px] text-[var(--muted)] font-mono">{selectedUser.userId}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                <DrawerSection icon={<Shield size={18} />} title="Account Settings">
-                  <div className="space-y-4 pt-2">
-                    <p className="text-xs font-semibold text-[var(--muted)] px-1">Change User Role</p>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <DrawerSection icon={<Shield size={16} />} title="Account Settings">
+                  <div className="space-y-2 pt-1">
+                    <p className="text-[9px] font-black text-[var(--muted)]/40 uppercase tracking-widest px-1">Change User Role</p>
                     <RoleDropdown
                       value={selectedUser.userType}
+                      compact
                       disabled={updatingUserId === selectedUser.userId || selectedUser.userType === "owner"}
                       onChange={(v) => {
                         changeUserRole(selectedUser.userId, v);
@@ -438,26 +439,26 @@ export default function UsersTab() {
                       }}
                     />
                     {selectedUser.userType === "owner" && (
-                      <p className="text-[11px] text-rose-500 font-medium px-1 italic">Role is restricted and cannot be modified.</p>
+                      <p className="text-[9px] text-rose-500/60 font-bold px-1 italic">Role is restricted and cannot be modified.</p>
                     )}
                   </div>
                 </DrawerSection>
 
-                <DrawerSection icon={<IdCard size={18} />} title="Profile Information">
+                <DrawerSection icon={<IdCard size={16} />} title="Profile Information">
                   <DrawerDetail label="Name" value={selectedUser.name} />
                   <DrawerDetail label="User ID" value={selectedUser.userId} />
-                  <DrawerDetail label="Joined On" value={new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })} />
+                  <DrawerDetail label="Joined On" value={new Date(selectedUser.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' })} />
                 </DrawerSection>
 
-                <DrawerSection icon={<Mail size={18} />} title="Contact Information">
+                <DrawerSection icon={<Mail size={16} />} title="Contact Information">
                   <DrawerDetail label="Email" value={selectedUser.email} />
                   <DrawerDetail label="Phone" value={selectedUser.phone || "Not provided"} />
                 </DrawerSection>
 
-                <DrawerSection icon={<Activity size={18} />} title="Activity">
+                <DrawerSection icon={<Activity size={16} />} title="Activity">
                   <DrawerDetail
                     label="Last Login"
-                    value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' }) : "Never"}
+                    value={selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : "Never"}
                   />
                   <DrawerDetail
                     label="IP Address"
@@ -681,22 +682,23 @@ function Avatar({ user, size = "md" }) {
 /* ================= HELPERS ================= */
 function DrawerSection({ icon, title, children }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-3 text-[var(--muted)]/40">
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 text-[var(--muted)]/30">
         <div className="text-[var(--accent)]">{icon}</div>
-        <h4 className="text-xs font-bold uppercase tracking-widest">{title}</h4>
+        <h4 className="text-[9px] font-black uppercase tracking-[0.2em]">{title}</h4>
+        <div className="h-px flex-1 bg-[var(--border)] opacity-50" />
       </div>
-      <div className="grid grid-cols-1 gap-4 px-1">{children}</div>
+      <div className="grid grid-cols-1 gap-2 px-1">{children}</div>
     </div>
   );
 }
 
 function DrawerDetail({ label, value }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-3">
-      <span className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider">{label}</span>
-      <span className="text-sm font-medium text-[var(--foreground)]">
-        {value || "Not available"}
+    <div className="flex justify-between items-baseline gap-4 group">
+      <span className="text-[9px] font-black text-[var(--muted)]/30 uppercase tracking-tight group-hover:text-[var(--muted)]/50 transition-colors whitespace-nowrap">{label}</span>
+      <span className="text-[11px] font-bold text-[var(--foreground)] text-right truncate">
+        {value || "N/A"}
       </span>
     </div>
   );

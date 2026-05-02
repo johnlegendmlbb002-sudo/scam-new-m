@@ -1,32 +1,16 @@
-import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
-import jwt from "jsonwebtoken";
+import { verifyAdmin } from "@/lib/adminAuth";
 
-export async function GET(req: Request) {
+export async function GET(req) {
     try {
-        await connectDB();
-
-        /* ================= AUTH ================= */
-        const auth = req.headers.get("authorization");
-        if (!auth?.startsWith("Bearer "))
-            return Response.json({ message: "Unauthorized" }, { status: 401 });
-
-        const token = auth.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
-
-        // Based on user role logic, if owners have access
-        if (decoded.userType !== "owner" && decoded.userType !== "admin") {
-            return Response.json({ message: "Forbidden" }, { status: 403 });
-        }
+        await verifyAdmin(req);
 
         const now = new Date();
 
-        const getStatsForPeriod = async (days: number) => {
+        const getStatsForPeriod = async (days) => {
             const gteDate = new Date();
             gteDate.setDate(now.getDate() - days);
 
-            // We probably want to sum totalValue only for successful orders, or total regardless?
-            // I'll sum the value of successful orders to reflect revenue, and show count of total orders.
             const stats = await Order.aggregate([
                 {
                     $match: {
@@ -69,8 +53,8 @@ export async function GET(req: Request) {
     } catch (err) {
         console.error(err);
         return Response.json(
-            { success: false, message: "Server error" },
-            { status: 500 }
+          { success: false, message: err.message || "Server error" },
+          { status: err.status || 500 }
         );
     }
 }

@@ -6,11 +6,11 @@ export async function POST(request) {
     await connectDB();
     const body = await request.json();
 
-    const { email, phone, type, message } = body;
+    const { email, phone, type, message, orderId } = body;
 
-    if (!type || !message) {
+    if (!type || !message || !phone) {
       return Response.json(
-        { success: false, message: "Query type and message are required" },
+        { success: false, message: "Phone, Query type and message are required" },
         { status: 400 }
       );
     }
@@ -20,6 +20,7 @@ export async function POST(request) {
       phone: phone || null,
       type,
       message,
+      orderId: orderId || null,
     });
 
     return Response.json(
