@@ -91,13 +91,17 @@ export default function GamesPage() {
 /* ================= SUB-COMPONENTS ================= */
 const GameCard = React.memo(({ game, disabled }: any) => {
   return (
-    <div className="group relative">
+    <motion.div 
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="group relative"
+    >
       <Link
         href={disabled ? "#" : `/games/${game.gameSlug}`}
-        className={`flex flex-col gap-3 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        className={`flex flex-col gap-2.5 ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         {/* IMAGE WRAPPER */}
-        <div className="relative aspect-square rounded-[1.4rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/40 shadow-sm group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]">
+        <div className="relative aspect-square rounded-[1.8rem] overflow-hidden bg-[var(--card)] border border-[var(--border)] transition-all duration-500 group-hover:border-[var(--accent)]/50 shadow-sm group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
 
           <div className="relative w-full h-full">
             <Image
@@ -105,49 +109,57 @@ const GameCard = React.memo(({ game, disabled }: any) => {
               alt={game.gameName}
               fill
               sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 15vw"
-              className={`object-cover transition-all duration-300 ease-out
-              ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-105"}`}
+              className={`object-cover transition-all duration-500 ease-out
+              ${disabled ? "grayscale opacity-30 scale-100" : "group-hover:scale-110"}`}
             />
 
             {/* High-Fidelity Overlays */}
             {!disabled && (
               <>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                <div className="absolute inset-0 border-[3px] border-white/0 group-hover:border-white/5 rounded-[1.8rem] transition-all duration-500" />
               </>
             )}
 
             {/* TAGS / BADGES */}
-            <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-start z-10">
+            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
               {!disabled && game.tagId ? (
                 <div
-                  className="px-2 py-0.5 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10"
+                  className="px-2.5 py-1 rounded-full text-[7px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-1.5 backdrop-blur-md border border-white/10 ring-1 ring-black/20"
                   style={{
-                    backgroundColor: `${game.tagId.tagBackground}cc`, // Add some transparency
+                    backgroundColor: `${game.tagId.tagBackground}dd`,
                     color: game.tagId.tagColor,
                   }}
                 >
-                  <div className="w-1 h-1 rounded-full bg-current" />
+                  <div className="w-1 h-1 rounded-full bg-current animate-pulse" />
                   {game.tagId.tagName}
                 </div>
               ) : <div />}
 
               {!disabled && (
-                <div className="w-6 h-6 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-                  <FiZap size={12} fill="currentColor" />
+                <div className="w-7 h-7 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-[-10px] group-hover:translate-y-0 shadow-lg">
+                  <FiZap size={14} fill="currentColor" />
                 </div>
               )}
             </div>
 
+            {/* QUICK BUY INDICATOR */}
+            {!disabled && (
+               <div className="absolute bottom-3 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                  <div className="px-3 py-1 rounded-full bg-[var(--accent)] text-black text-[7px] font-black uppercase tracking-[0.2em] shadow-xl">
+                     Instant Buy
+                  </div>
+               </div>
+            )}
+
             {/* OUT OF STOCK OVERLAY */}
             {disabled && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
-                <div className="w-8 h-8 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center mb-1.5">
-                  <FiX size={16} className="text-red-500" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[3px]">
+                <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-2">
+                  <FiX size={20} className="text-red-500/50" />
                 </div>
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-red-500 drop-shadow-md">
-                  OFF
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/60 drop-shadow-md">
+                  Inactive
                 </span>
               </div>
             )}
@@ -155,14 +167,14 @@ const GameCard = React.memo(({ game, disabled }: any) => {
         </div>
 
         {/* CARD FOOTER */}
-        <div className="px-1.5 space-y-0.5">
-          <h3 className="text-[11px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
+        <div className="px-1 space-y-1">
+          <h3 className="text-[11px] md:text-[12px] font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none group-hover:text-[var(--accent)] transition-colors duration-300">
             {game.gameName}
           </h3>
 
           <div className="flex items-center gap-1">
             {game.gameFrom ? (
-              <p className="text-[7px] text-[var(--foreground)] font-bold uppercase tracking-[0.15em] opacity-30 group-hover:opacity-60 transition-opacity">
+              <p className="text-[7px] text-[var(--muted)] font-black uppercase tracking-[0.2em] opacity-40 group-hover:opacity-80 transition-opacity">
                 {game.gameFrom}
               </p>
             ) : (
@@ -171,7 +183,7 @@ const GameCard = React.memo(({ game, disabled }: any) => {
           </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 });
 GameCard.displayName = "GameCard";
@@ -245,7 +257,7 @@ const SectionHeader = ({ title, count, icon: Icon }: any) => (
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-6 mt-6 space-y-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 space-y-10">
 
         {/* GAMES SECTION */}
         <section>

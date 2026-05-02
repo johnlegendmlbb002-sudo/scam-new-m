@@ -9,15 +9,16 @@ import {
   FiAward,
   FiActivity,
   FiZap,
-  FiShield
+  FiShield,
+  FiStar
 } from "react-icons/fi";
-import { FaTrophy } from "react-icons/fa";
+import { FaTrophy, FaCrown } from "react-icons/fa";
 import AuthGuard from "@/components/AuthGuard";
 
 export default function LeaderboardPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState("monthly"); // weekly | monthly
+  const [range, setRange] = useState("thisMonth"); // thisMonth | prevMonth
 
   const limit = 10;
 
@@ -40,7 +41,7 @@ export default function LeaderboardPage() {
   }, [range]);
 
   const getRankStyle = (rank) => {
-    if (rank === 1) return { color: "text-yellow-400", bg: "bg-yellow-400/10", border: "border-yellow-400/50", icon: FaTrophy };
+    if (rank === 1) return { color: "text-[var(--accent)]", bg: "bg-[var(--accent)]/10", border: "border-[var(--accent)]/50", icon: FaCrown };
     if (rank === 2) return { color: "text-slate-300", bg: "bg-slate-300/10", border: "border-slate-300/50", icon: FiAward };
     if (rank === 3) return { color: "text-orange-400", bg: "bg-orange-400/10", border: "border-orange-400/50", icon: FiAward };
     return { color: "text-[var(--muted)]", bg: "bg-[var(--card)]/50", border: "border-[var(--border)]", icon: FiUser };
@@ -50,13 +51,13 @@ export default function LeaderboardPage() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
+      transition: { staggerChildren: 0.05 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
   };
 
   const podiumData = data.slice(0, 3);
@@ -64,104 +65,81 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] py-12 px-4 relative overflow-hidden">
-        {/* BACKGROUND DECORATION */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.05] pointer-events-none" />
+      <div className="min-h-screen bg-[var(--background)] py-16 px-4 relative overflow-hidden">
+        {/* AMBIENT BACKGROUND */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
-        <div className="max-w-5xl mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto relative z-10 space-y-12">
 
-          {/* HEADER SECTION */}
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 mb-4"
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase">Live Rankings</span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-black italic tracking-tighter mb-4"
-            >
-              TOP <span className="text-[var(--accent)]">SPENDERS</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-[var(--muted)] text-xs font-medium uppercase tracking-widest max-w-md mx-auto"
-            >
-              See who's at the top this month.
-            </motion.p>
-          </div>
-
-          {/* RANGE TOGGLE */}
-          <div className="flex justify-center mb-12">
-            <div className="inline-flex p-1 bg-[var(--card)]/50 border border-[var(--border)] rounded-xl backdrop-blur-md">
-              {[{ id: "weekly", label: "This Week" }, { id: "monthly", label: "This Month" }].map((r) => (
-                <button
-                  key={r.id}
-                  onClick={() => setRange(r.id)}
-                  className={`px-6 py-2 rounded-lg text-xs font-bold transition-all duration-300 relative overflow-hidden ${range === r.id
-                    ? "text-white"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                    }`}
-                >
-                  <span className="relative z-10 uppercase tracking-tighter">{r.label}</span>
-                  {range === r.id && (
-                    <motion.div
-                      layoutId="activeRange"
-                      className="absolute inset-0 bg-[var(--accent)] shadow-[0_0_15px_rgba(var(--accent-rgb),0.5)]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
+          {/* SIMPLE HEADER */}
+          <div className="text-center space-y-4">
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.9 }}
+               animate={{ opacity: 1, scale: 1 }}
+               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 shadow-xl"
+             >
+                <FiStar className="text-[var(--accent)] animate-pulse" size={12} />
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Top Rankings</span>
+             </motion.div>
+             
+             <h1 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
+                Top <span className="text-[var(--accent)]">Spenders</span>
+             </h1>
+             
+             <div className="flex flex-col items-center gap-4">
+                <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.2em] opacity-60">
+                   {range === 'thisMonth' ? 'This Month' : 'Last Month'} Rankings
+                </p>
+                
+                {/* RANGE TOGGLE */}
+                <div className="inline-flex p-1 bg-[var(--card)]/30 backdrop-blur-xl border border-[var(--border)] rounded-2xl">
+                  {[{ id: "thisMonth", label: "This Month" }, { id: "prevMonth", label: "Prev Month" }].map((r) => (
+                    <button
+                      key={r.id}
+                      onClick={() => setRange(r.id)}
+                      className={`relative px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${range === r.id ? "text-black" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+                    >
+                      <span className="relative z-10">{r.label}</span>
+                      {range === r.id && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-[var(--accent)] rounded-xl shadow-lg shadow-[var(--accent)]/20"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+             </div>
           </div>
 
           {loading ? (
-            <div className="space-y-4 max-w-2xl mx-auto">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-16 bg-[var(--card)]/50 animate-pulse rounded-xl border border-[var(--border)]" />
-              ))}
+            <div className="space-y-4 max-w-2xl mx-auto py-20">
+               <div className="flex justify-center">
+                  <div className="w-12 h-12 border-4 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+               </div>
             </div>
           ) : data.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-20 border border-dashed border-[var(--border)] rounded-3xl bg-[var(--card)]/20 backdrop-blur-sm"
-            >
-              <div className="inline-flex p-4 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] mb-6">
-                <FiZap size={32} />
-              </div>
-              <h2 className="text-xl font-bold mb-2 uppercase tracking-tight">No Rankings Yet</h2>
-              <p className="text-[var(--muted)] text-xs max-w-xs mx-auto mb-8">
-                Be the first one to show up on the leaderboard!
-              </p>
-            </motion.div>
+            <div className="py-20 text-center bg-[var(--card)]/20 border border-dashed border-[var(--border)] rounded-[2rem] backdrop-blur-sm">
+               <FiActivity size={40} className="mx-auto mb-4 text-[var(--muted)] opacity-20" />
+               <p className="text-xs font-black uppercase tracking-widest text-[var(--muted)]">No data detected in current range</p>
+            </div>
           ) : (
-            <div className="space-y-12">
+            <div className="space-y-16">
 
               {/* PODIUM SECTION */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-6 items-end max-w-4xl mx-auto px-1 sm:px-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-6 items-end">
                 {/* 2nd Place */}
-                <div className="">
+                <div className="order-1">
                   {podiumData[1] && <PodiumCard user={podiumData[1]} rank={2} style={getRankStyle(2)} />}
                 </div>
 
                 {/* 1st Place */}
-                <div className="transform -translate-y-2 sm:-translate-y-8">
+                <div className="order-2 transform -translate-y-4 md:-translate-y-8">
                   {podiumData[0] && <PodiumCard user={podiumData[0]} rank={1} style={getRankStyle(1)} isMain={true} />}
                 </div>
 
                 {/* 3rd Place */}
-                <div className="">
+                <div className="order-3">
                   {podiumData[2] && <PodiumCard user={podiumData[2]} rank={3} style={getRankStyle(3)} />}
                 </div>
               </div>
@@ -172,36 +150,38 @@ export default function LeaderboardPage() {
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
-                  className="max-w-2xl mx-auto space-y-3 px-4"
+                  className="max-w-2xl mx-auto space-y-2"
                 >
-                  <div className="flex items-center justify-between px-6 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">
-                    <span>User</span>
-                    <div className="flex justify-end">
-                      <span className="w-24 text-right">Spent</span>
-                    </div>
+                  <div className="flex items-center justify-between px-6 py-2">
+                     <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)] opacity-40">Rankings</span>
+                     <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--muted)] opacity-40">Total Spent</span>
                   </div>
 
                   {remainingData.map((item, index) => {
                     const rank = index + 4;
-                    const style = getRankStyle(rank);
                     return (
                       <motion.div
                         key={index}
                         variants={itemVariants}
-                        whileHover={{ x: 5, backgroundColor: "rgba(var(--accent-rgb), 0.05)" }}
-                        className="group flex items-center justify-between p-4 bg-[var(--card)]/40 border border-[var(--border)]/50 rounded-xl backdrop-blur-sm transition-all duration-300"
+                        className="group flex items-center justify-between p-4 bg-[var(--card)]/30 backdrop-blur-md border border-[var(--border)] rounded-2xl hover:border-[var(--accent)]/50 transition-all duration-500 shadow-sm"
                       >
                         <div className="flex items-center gap-4">
-                          <span className="text-xs font-black text-[var(--muted)] italic w-6">#{rank}</span>
+                          <div className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center text-[10px] font-black italic text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+                             #{rank}
+                          </div>
                           <div className="flex flex-col">
-                            <span className="text-sm font-bold tracking-tight">{item.user?.name || "Anonymous Operative"}</span>
+                             <span className="text-sm font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none mb-1">
+                                {item.user?.name || "Anonymous User"}
+                             </span>
+                             <span className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-40">Verified User</span>
                           </div>
                         </div>
 
-                        <div className="flex justify-end">
-                          <div className="w-24 text-right">
-                            <span className="text-sm font-bold text-[var(--accent)] tracking-tighter">₹{item.totalSpent}</span>
-                          </div>
+                        <div className="flex flex-col items-end">
+                           <span className="text-lg font-black italic tracking-tighter text-[var(--accent)] leading-none">
+                              ₹{item.totalSpent}
+                           </span>
+                           <span className="text-[7px] font-black text-[var(--muted)] uppercase tracking-widest opacity-30">Amount spent</span>
                         </div>
                       </motion.div>
                     );
@@ -211,9 +191,6 @@ export default function LeaderboardPage() {
             </div>
           )}
         </div>
-
-        {/* SCANLINE EFFECT */}
-        <div className="fixed inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.05)_50%)] z-50 bg-[length:100%_4px] pointer-events-none opacity-10" />
       </div>
     </AuthGuard>
   );
@@ -224,45 +201,42 @@ function PodiumCard({ user, rank, style, isMain = false }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: isMain ? -12 : -5 }}
-      transition={{ duration: 0.5 }}
-      className={`relative group p-3 sm:p-6 rounded-2xl sm:rounded-3xl border ${style.border} ${style.bg} backdrop-blur-xl transition-all duration-500 overflow-hidden flex flex-col items-center text-center ${isMain ? 'sm:scale-110 shadow-[0_20px_50px_-10px_rgba(var(--accent-rgb),0.2)]' : ''}`}
+      whileHover={{ y: -10 }}
+      className={`relative group p-4 sm:p-8 rounded-[2rem] border ${style.border} ${style.bg} backdrop-blur-2xl transition-all duration-700 flex flex-col items-center text-center shadow-2xl ${isMain ? 'ring-1 ring-[var(--accent)]/20' : ''}`}
     >
-      {/* SCANLINE */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.02)_50%)] z-0 bg-[length:100%_4px] pointer-events-none opacity-50" />
+      {/* GLOW EFFECT */}
+      {isMain && (
+         <div className="absolute inset-0 bg-gradient-to-t from-[var(--accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      )}
 
-      {/* GLOW */}
-      {isMain && <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--accent)] blur-[100px] opacity-20" />}
-
-      {/* RANK BADGE */}
-      <div className={`relative z-10 mb-2 sm:mb-4 p-2 sm:p-4 rounded-xl sm:rounded-2xl border ${style.border} bg-black/20 group-hover:scale-110 transition-transform duration-500`}>
-        <Icon size={isMain ? 32 : 20} className={`sm:hidden ${style.color}`} />
-        <Icon className={`hidden sm:block ${style.color}`} size={isMain ? 40 : 28} />
-        <div className={`absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-5 h-5 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black italic text-[8px] sm:text-xs border ${style.border} bg-black`}>
-          #{rank}
-        </div>
+      {/* RANK ICON */}
+      <div className={`relative z-10 mb-4 w-12 h-12 sm:w-20 sm:h-20 rounded-2xl bg-black/40 border ${style.border} flex items-center justify-center ${style.color} group-hover:scale-110 transition-transform duration-700 shadow-inner`}>
+         <Icon size={isMain ? 40 : 28} className="drop-shadow-lg" />
+         <div className="absolute -bottom-2 -right-2 w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-black border border-inherit flex items-center justify-center text-[10px] sm:text-sm font-black italic text-white shadow-xl">
+            #{rank}
+         </div>
       </div>
 
-      {/* USER INFO */}
-      <div className="relative z-10 space-y-0.5 sm:space-y-1">
-        <h3 className={`font-black tracking-tight leading-tight truncate w-full ${isMain ? 'text-xs sm:text-xl' : 'text-[10px] sm:text-base'}`}>
-          {user.user?.name || "Anonymous"}
-        </h3>
-        <p className="text-[7px] sm:text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em] sm:tracking-[0.2em] mb-1 sm:mb-4">
-          Ranked
-        </p>
+      {/* USER DATA */}
+      <div className="relative z-10 space-y-1 w-full overflow-hidden">
+         <h3 className={`font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate ${isMain ? 'text-lg sm:text-3xl' : 'text-xs sm:text-xl'}`}>
+            {user.user?.name || "Player"}
+         </h3>
+         <p className="text-[7px] sm:text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.2em] opacity-60">
+            Top Spender
+         </p>
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-white/5">
-        <span className="text-[6px] sm:text-[8px] font-black text-[var(--muted)] uppercase">Total Spent</span>
-        <span className={`text-xs sm:text-base font-black tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
+      <div className="relative z-10 w-full mt-6 pt-6 border-t border-white/5 flex flex-col gap-1">
+         <span className="text-[7px] sm:text-[8px] font-black text-[var(--muted)] uppercase tracking-widest opacity-40">Spent</span>
+         <span className={`text-xl sm:text-3xl font-black italic tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
       </div>
-
-      {/* DECORATIVE CORNER BRACKETS */}
-      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 w-2 h-2 sm:w-4 sm:h-4 border-t border-l sm:border-t-2 sm:border-l-2 border-white/5 group-hover:border-[var(--accent)]/30 transition-colors" />
-      <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 w-2 h-2 sm:w-4 sm:h-4 border-b border-r sm:border-b-2 sm:border-r-2 border-white/5 group-hover:border-[var(--accent)]/30 transition-colors" />
+      
+      {/* CORNER ACCENTS */}
+      <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-white/5 group-hover:border-[var(--accent)]/40 transition-colors" />
+      <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-white/5 group-hover:border-[var(--accent)]/40 transition-colors" />
     </motion.div>
   );
 }

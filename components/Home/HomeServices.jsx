@@ -2,40 +2,60 @@
 
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
+import { FiCode, FiArrowRight, FiActivity } from "react-icons/fi";
 
 export default function HomeServices() {
-  return (
-    <section className="py-4 px-4 bg-[var(--background)]">
-      <div 
-        className="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-[var(--card)] border border-[var(--border)] shadow-sm relative overflow-hidden group transition-colors duration-300"
-      >
-        {/* Subtle background glow on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-        
-        <div className="relative z-10 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-0.5">
-             <div className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-             <h3 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--accent)] opacity-80">
-               Our Services
-             </h3>
-          </div>
-          <h2 className="text-base font-black text-[var(--foreground)] tracking-tight leading-tight">
-            Build Your Site
-          </h2>
-          <p className="text-[10px] text-[var(--muted)] font-medium mt-0.5 max-w-[240px] leading-relaxed">
-            We build clean, fast websites and software for your business.
-          </p>
-        </div>
+  const whatsappLink = process.env.NEXT_PUBLIC_MADE_BY_URL || "https://wa.me/919178521537";
 
-        <a
-          href="https://wa.me/919178521537"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-20 flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[var(--accent)] !text-black font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-[var(--accent)]/20 transition-all cursor-pointer group/btn"
-        >
-          <FaWhatsapp size={18} className="!text-black drop-shadow-sm" />
-          <span className="!text-black">Contact Us</span>
-        </a>
+  return (
+    <section className="py-6 px-4 bg-[var(--background)]">
+      <div className="max-w-3xl mx-auto relative group">
+        {/* Outer Glow Effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--accent)]/20 via-transparent to-[var(--accent)]/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-700" />
+
+        <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6 p-6 rounded-2xl bg-card/40 backdrop-blur-xl border border-white/5 shadow-2xl overflow-hidden text-left">
+          {/* Tactical Background Pattern */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, var(--foreground) 1px, transparent 0)', backgroundSize: '12px 12px' }} />
+
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 relative z-10 w-full">
+
+
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="px-1.5 py-0.5 rounded-[4px] bg-[var(--accent)]/10 text-[var(--accent)] text-[8px] font-black uppercase tracking-widest border border-[var(--accent)]/10">
+                  Services
+                </span>
+                <span className="flex items-center gap-1 text-[8px] font-bold text-muted uppercase tracking-widest opacity-60">
+                  <FiActivity className="text-[10px]" /> Online
+                </span>
+              </div>
+
+              <h2 className="text-xl font-black text-foreground tracking-tighter uppercase italic leading-none">
+                Web & App <span className="text-[var(--accent)]">Service</span>
+              </h2>
+
+              <p className="text-[11px] font-bold text-muted/80 uppercase tracking-wide max-w-[320px] leading-relaxed">
+                We build websites, custom software, and API solutions for you.
+              </p>
+
+              <div className="pt-2">
+                <motion.a
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-foreground text-background font-black text-[10px] uppercase tracking-[0.15em] shadow-xl hover:bg-[var(--accent)] hover:text-white transition-all duration-300 group/btn"
+                >
+                  <FaWhatsapp size={16} />
+                  <span>Contact Us</span>
+                  <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

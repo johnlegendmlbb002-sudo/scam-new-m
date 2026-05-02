@@ -17,15 +17,15 @@ function verifyUser(req) {
 function getDateFilter(range) {
   const now = new Date();
 
-  if (range === "weekly") {
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - 7);
-    return { $gte: weekStart };
-  }
-
-  if (range === "monthly") {
+  if (range === "thisMonth") {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     return { $gte: monthStart };
+  }
+
+  if (range === "prevMonth") {
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+    return { $gte: prevMonthStart, $lte: prevMonthEnd };
   }
 
   return null; // all-time
@@ -41,7 +41,7 @@ export async function GET(req) {
 
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
-    const range = searchParams.get("range") || "all";
+    const range = searchParams.get("range") || "thisMonth";
 
     const skip = (page - 1) * limit;
 
