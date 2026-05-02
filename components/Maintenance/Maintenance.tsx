@@ -83,10 +83,10 @@ export default function Maintenance() {
                                 </Link>
                                 
                                 <button 
-                                    onClick={() => window.open('https://waitlist.tronics.official', '_blank')}
+                                    onClick={() => window.open('https://waitlist.scammer.official', '_blank')}
                                     className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.3em] hover:text-zinc-400 transition-colors"
                                 >
-                                    Tronics Official
+                                    Scammer Official
                                 </button>
                             </div>
                         </div>

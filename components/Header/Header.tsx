@@ -419,7 +419,7 @@ export default function Header() {
                     {/* FOOTER OF SIDEBAR */}
                     <div className="p-4 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-1">
                        <p className="text-[7px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-50">Love from TK</p>
-                       <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">TRONICS © 2026</p>
+                       <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">SCAMMER © 2026</p>
                     </div>
                   </motion.div>
                 </>
