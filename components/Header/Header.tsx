@@ -13,6 +13,7 @@ export default function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [avatarError, setAvatarError] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
@@ -214,13 +215,14 @@ export default function Header() {
               whileTap={{ scale: 0.97 }}
             >
               <div className="w-full h-full rounded-full bg-[var(--accent)] flex items-center justify-center overflow-hidden shadow-sm">
-                {!loading && user?.avatar ? (
+                {!loading && user?.avatar && !avatarError ? (
                   <Image
                     src={user.avatar}
                     alt="User Avatar"
                     width={28}
                     height={28}
                     className="object-cover w-full h-full"
+                    onError={() => setAvatarError(true)}
                   />
                 ) : (
                   <span className="text-white text-[10px] font-black uppercase">
@@ -248,178 +250,124 @@ export default function Header() {
                     initial={{ x: "100%" }}
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
-                    transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                    className="fixed right-0 top-0 h-[100dvh] w-[75%] sm:w-[320px] bg-[var(--card)] border-l border-[var(--border)] shadow-2xl z-[1001] flex flex-col"
+                    transition={{ type: "spring", damping: 35, stiffness: 400 }}
+                    className="fixed right-0 top-0 h-[100dvh] w-[75%] sm:w-[320px] bg-[var(--background)] border-l border-[var(--border)] shadow-2xl z-[1001] flex flex-col overflow-hidden"
                   >
-                    {/* CLOSE BUTTON - FLOATING TOP RIGHT */}
-                    <div className="p-4 flex items-center justify-between border-b border-[var(--border)] shrink-0">
-                      <h2 className="text-[10px] font-black italic uppercase tracking-[0.2em] text-[var(--muted)] opacity-50">Account</h2>
-                      <motion.button
+                    {/* 🔝 TOP HEADER */}
+                    <div className="px-5 py-4 flex items-center justify-between border-b border-[var(--border)] relative z-10 bg-[var(--background)]">
+                      <div className="flex items-center gap-2">
+                         <div className="w-1 h-3 bg-[var(--accent)] rounded-full" />
+                         <h2 className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]">Menu</h2>
+                      </div>
+                      <button
                         onClick={() => setUserMenuOpen(false)}
-                        whileHover={{ rotate: 90, scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="w-8 h-8 rounded-full bg-[var(--foreground)]/[0.05] flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-black transition-colors"
+                        className="w-8 h-8 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-[var(--foreground)] hover:text-[var(--accent)] transition-all"
                       >
-                        <FiX className="text-lg" />
-                      </motion.button>
+                        <FiX size={16} />
+                      </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-4 py-6 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto px-5 py-6 custom-scrollbar relative z-10">
                       {!user ? (
-                        <div className="flex flex-col items-center justify-center text-center">
-                          <motion.div
-                            initial={{ scale: 0.8, rotate: -5 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            className="w-16 h-16 bg-gradient-to-br from-[var(--accent)]/25 via-[var(--accent)]/10 to-transparent rounded-[1.2rem] flex items-center justify-center mb-5 border border-[var(--accent)]/30 shadow-[0_10px_20px_-5px_rgba(var(--accent-rgb),0.3)] relative group"
-                          >
-                            <div className="absolute inset-0 bg-[var(--accent)]/15 blur-xl group-hover:blur-2xl transition-all opacity-70" />
-                            <FiUser className="text-3xl text-[var(--accent)] relative z-10" />
-                          </motion.div>
-
-                          <h3 className="text-[var(--foreground)] font-black italic uppercase tracking-tighter text-2xl mb-1 leading-none">
-                            Welcome, <span className="text-[var(--accent)]">User</span>
+                        <div className="flex flex-col items-center justify-center text-center h-full">
+                          <div className="w-16 h-16 bg-[var(--card)] border border-[var(--border)] rounded-2xl flex items-center justify-center mb-4">
+                            <FiUser className="text-3xl text-[var(--accent)]" />
+                          </div>
+                          <h3 className="text-xl font-black italic uppercase text-[var(--foreground)] mb-1">
+                             Hi, <span className="text-[var(--accent)]">Guest</span>
                           </h3>
-                          <p className="text-[9px] text-[var(--muted)] mb-6 font-bold uppercase tracking-[0.2em] opacity-60 leading-relaxed max-w-[180px]">
-                            Sign in to access your wallet and orders.
+                          <p className="text-[9px] text-[var(--muted)] font-bold uppercase tracking-widest mb-6">
+                             Login to manage your wallet.
                           </p>
+                          <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
+                            <button className="w-full py-3 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-[10px] rounded-xl">
+                               Login
+                            </button>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="space-y-6">
+                          {/* 👤 USER PROFILE */}
+                          <div className="flex items-center gap-3 bg-[var(--card)] border border-[var(--border)] p-3 rounded-2xl">
+                             <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--background)] border border-[var(--border)]">
+                                {user?.avatar && !avatarError ? (
+                                  <Image
+                                    src={user.avatar}
+                                    alt="Avatar"
+                                    width={40}
+                                    height={40}
+                                    className="object-cover w-full h-full"
+                                    onError={() => setAvatarError(true)}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center bg-[var(--accent)]">
+                                    <span className="text-white text-sm font-black">
+                                      {(user.name || user.username || "U")[0]}
+                                    </span>
+                                  </div>
+                                )}
+                             </div>
+                             <div className="flex flex-col flex-1 min-w-0">
+                                <span className="text-sm font-black italic uppercase text-[var(--foreground)] truncate">
+                                   {user.name || user.username}
+                                </span>
+                             </div>
+                             <button
+                               onClick={handleLogout}
+                               className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center"
+                             >
+                                <FiLogOut size={14} />
+                             </button>
+                          </div>
 
-                          {/* Mobile/Guest Navigation Nodes */}
-                          <div className="flex flex-col gap-1.5 w-full mb-8">
+                          {/* 💳 WALLET */}
+                          <div className="bg-[var(--accent)] p-4 rounded-2xl">
+                             <p className="text-[8px] font-black uppercase tracking-widest text-black/50 mb-0.5">Balance</p>
+                             <div className="flex items-center justify-between">
+                                <span className="text-2xl font-black italic text-black">₹{user.wallet?.toFixed(1) || "0.0"}</span>
+                                <Link href="/dashboard/wallet" onClick={() => setUserMenuOpen(false)}>
+                                   <button className="px-3 py-1.5 bg-black text-white text-[8px] font-black uppercase tracking-widest rounded-lg">
+                                      Top Up
+                                   </button>
+                                </Link>
+                             </div>
+                          </div>
+
+                          {/* 🧭 LINKS */}
+                          <div className="space-y-1.5">
+                            <h4 className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-50 px-1 mb-2">Links</h4>
                             {[
-                              { label: "Games", icon: FiGrid, href: "/games" },
-                              { label: "Regions", icon: FiGlobe, href: "/regions" }
+                              { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
+                              { label: "Orders", icon: FiSettings, href: "/dashboard/order" },
+                              { label: "Support", icon: FiLifeBuoy, href: "/dashboard/query" },
+                              { label: "Leaderboard", icon: FiBarChart2, href: "/leaderboard" },
                             ].map((link) => (
                               <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[var(--foreground)]/[0.03] border border-[var(--border)] hover:bg-[var(--foreground)]/[0.06] hover:border-[var(--accent)]/30 text-[var(--muted)] transition-all group">
-                                  <link.icon className="text-lg text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-[var(--foreground)]">{link.label}</span>
+                                <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[var(--card)]/50 border border-[var(--border)] hover:border-[var(--accent)] transition-all group">
+                                  <link.icon className="text-base text-[var(--muted)] group-hover:text-[var(--accent)]" />
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--muted)] group-hover:text-[var(--foreground)]">{link.label}</span>
                                 </div>
                               </Link>
                             ))}
                           </div>
 
-                          <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full mt-auto">
-                            <motion.button
-                              className="w-full py-4 bg-[var(--foreground)] text-[var(--background)] font-black italic uppercase tracking-[0.4em] text-[10px] rounded-xl shadow-[0_10px_20px_-5px_rgba(0,0,0,0.4)] flex items-center justify-center gap-2 group relative overflow-hidden"
-                              whileHover={{ scale: 1.02, backgroundColor: 'var(--accent)', color: 'black' }}
-                              whileTap={{ scale: 0.98 }}
-                            >
-                              <span className="relative z-10">Sign In</span>
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out" />
-                            </motion.button>
-                          </Link>
-                        </div>
-                      ) : (
-                        <div className="space-y-6">
-                          {/* User Profile Header horizontal */}
-                          <div className="flex items-center gap-3 pb-6 border-b border-[var(--border)] relative">
-                            {/* Left: Avatar */}
-                            <div className="w-12 h-12 rounded-[0.8rem] bg-[var(--accent)] p-[1.5px] shadow-[0_5px_15px_-5px_rgba(var(--accent-rgb),0.5)] shrink-0">
-                              <div className="w-full h-full rounded-[0.7rem] overflow-hidden bg-[var(--card)]">
-                                {user?.avatar ? (
-                                  <Image
-                                    src={user.avatar}
-                                    alt="User Avatar"
-                                    width={48}
-                                    height={48}
-                                    className="object-cover w-full h-full"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)]">
-                                    <span className="text-white text-lg font-black uppercase">
-                                      {(user.name || user.username || user.email || "U")[0]}
-                                    </span>
-                                  </div>
-                                )}
+                          {user.userType === "owner" && (
+                            <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)}>
+                              <div className="p-3 rounded-xl bg-black border border-white/5 flex items-center justify-between hover:border-[var(--accent)] transition-all">
+                                 <div className="flex items-center gap-2">
+                                    <FiSettings size={12} className="text-[var(--accent)]" />
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-white">Admin Panel</span>
+                                 </div>
                               </div>
-                            </div>
-
-                            {/* Middle: Info */}
-                            <div className="flex flex-col flex-1 min-w-0">
-                              <span className="text-sm font-black italic uppercase tracking-tight text-[var(--foreground)] truncate leading-none mb-0.5">
-                                {user.name || user.username}
-                              </span>
-                              <span className="text-[8px] font-bold text-[var(--muted)] opacity-50 uppercase tracking-widest truncate">
-                                {user.email}
-                              </span>
-                            </div>
-                            
-                            {/* Right: Logout Icon */}
-                            <motion.button
-                              onClick={handleLogout}
-                              className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shrink-0 border border-red-500/10"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              title="Sign Out"
-                            >
-                              <FiLogOut size={18} strokeWidth={2.5} />
-                            </motion.button>
-                          </div>
-
-                          {/* Navigation nodes compacted */}
-                          <div className="space-y-1">
-                            <div className="lg:hidden space-y-1 mb-4">
-                              {[
-                                { label: "Games", icon: FiGrid, href: "/games" },
-                                { label: "Regions", icon: FiGlobe, href: "/regions" }
-                              ].map((link) => (
-                                <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--foreground)]/[0.03] text-[var(--muted)] group transition-all border border-transparent hover:border-[var(--border)]">
-                                    <link.icon className="text-base text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest group-hover:text-[var(--foreground)]">{link.label}</span>
-                                  </div>
-                                </Link>
-                              ))}
-                              <div className="h-[1px] bg-[var(--border)] mx-4 my-2 opacity-50" />
-                            </div>
-
-                            {[
-                              { label: "Dashboard", icon: FiLayout, href: "/dashboard" },
-                              { label: "Orders", icon: FiSettings, href: "/dashboard/order" },
-                              { label: "Wallet", icon: FiPlus, href: "/dashboard/wallet" },
-                              { label: "Support", icon: FiLifeBuoy, href: "/dashboard/query" },
-                              { label: "Leaderboard", icon: FiBarChart2, href: "/leaderboard" },
-                            ].map((link, idx) => (
-                              <Link key={link.label} href={link.href} onClick={() => setUserMenuOpen(false)}>
-                                <motion.div
-                                  initial={{ opacity: 0, x: 20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.05 }}
-                                  className="relative flex items-center justify-between px-4 py-2.5 rounded-xl hover:bg-[var(--foreground)]/[0.04] text-[var(--muted)] group transition-all duration-300 border border-transparent hover:border-[var(--border)]"
-                                  whileHover={{ x: -2 }}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <link.icon className="text-lg opacity-50 group-hover:opacity-100 group-hover:text-[var(--accent)] transition-all duration-300" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-[var(--foreground)] transition-colors">{link.label}</span>
-                                  </div>
-                                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                                </motion.div>
-                              </Link>
-                            ))}
-
-                            {user.userType === "owner" && (
-                              <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)}>
-                                <motion.div
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: 0.3 }}
-                                  className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/20 transition-all mt-4 group shadow-sm"
-                                  whileHover={{ scale: 1.02 }}
-                                >
-                                  <FiSettings size={14} className="group-hover:rotate-90 transition-transform duration-700" />
-                                  <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
-                                </motion.div>
-                              </Link>
-                            )}
-                          </div>
+                            </Link>
+                          )}
                         </div>
                       )}
                     </div>
                     
-                    {/* FOOTER OF SIDEBAR */}
-                    <div className="p-4 border-t border-[var(--border)] mt-auto bg-[var(--foreground)]/[0.02] text-center space-y-1">
-                       <p className="text-[7px] font-black uppercase tracking-[0.4em] text-[var(--accent)] opacity-50">Love from TK</p>
-                       <p className="text-[8px] font-bold text-[var(--muted)] uppercase tracking-[0.3em] opacity-30">SCAMMER © 2026</p>
+                    {/* 🏁 FOOTER */}
+                    <div className="p-4 border-t border-[var(--border)] text-center">
+                       <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">Scammer Store © 2026</p>
                     </div>
                   </motion.div>
                 </>

@@ -110,42 +110,57 @@ export default function ReviewAndPaymentStep({
             </div>
           </div>
 
-          {/* PLAYER & CONTACT DETAILS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div className="bg-[var(--card)]/50 p-5 rounded-2xl border border-[var(--border)]">
-              <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                <FiShield className="text-indigo-400" /> Account Details
-              </h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-[var(--muted)]">Name</span>
-                  <span className="font-semibold">{reviewData.userName}</span>
+          {/* PLAYER & CONTACT DETAILS - ULTRA COMPACT GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+            {/* Account Details Card */}
+            <div className="relative overflow-hidden bg-[var(--card)]/40 backdrop-blur-md p-4 rounded-3xl border border-[var(--border)] group">
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3 px-1">
+                  <FiShield className="text-[var(--accent)]" size={12} />
+                  <h4 className="text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.15em]">Account</h4>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-[var(--muted)]">User ID</span>
-                  <span className="font-semibold text-[var(--accent)]">{reviewData.playerId}</span>
-                </div>
-                {reviewData.zoneId && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[var(--muted)]">Zone ID</span>
-                    <span className="font-semibold">{reviewData.zoneId}</span>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Name</span>
+                    <span className="text-xs font-black italic uppercase text-[var(--foreground)] tracking-tight">{reviewData.userName}</span>
                   </div>
-                )}
+                  <div className="h-[1px] w-full bg-[var(--border)] opacity-20" />
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">User ID</span>
+                    <span className="text-xs font-black italic uppercase text-[var(--accent)] tracking-tighter">{reviewData.playerId}</span>
+                  </div>
+                  {reviewData.zoneId && (
+                    <>
+                      <div className="h-[1px] w-full bg-[var(--border)] opacity-20" />
+                      <div className="flex items-center justify-between px-1">
+                        <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Zone</span>
+                        <span className="text-xs font-black italic uppercase text-[var(--foreground)] tracking-tighter">{reviewData.zoneId}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="bg-[var(--card)]/50 p-5 rounded-2xl border border-[var(--border)]">
-              <h4 className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                <FiZap className="text-emerald-400" /> Contact Info
-              </h4>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-[var(--muted)]">Email</span>
-                  <span className="font-semibold truncate max-w-[120px]">{userEmail || "N/A"}</span>
+            {/* Contact Info Card */}
+            <div className="relative overflow-hidden bg-[var(--card)]/40 backdrop-blur-md p-4 rounded-3xl border border-[var(--border)] group">
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3 px-1">
+                  <FiZap className="text-[var(--accent)]" size={12} />
+                  <h4 className="text-[9px] font-black text-[var(--muted)] uppercase tracking-[0.15em]">Contact</h4>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-[var(--muted)]">Phone</span>
-                  <span className="font-semibold">{userPhone || "N/A"}</span>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Email</span>
+                    <span className="text-xs font-black italic uppercase text-[var(--foreground)] tracking-tight truncate max-w-[120px]">{userEmail || "N/A"}</span>
+                  </div>
+                  <div className="h-[1px] w-full bg-[var(--border)] opacity-20" />
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider">Phone</span>
+                    <span className="text-xs font-black italic uppercase text-[var(--foreground)] tracking-tighter">{userPhone || "N/A"}</span>
+                  </div>
                 </div>
               </div>
             </div>

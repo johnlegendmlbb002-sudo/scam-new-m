@@ -8,18 +8,14 @@ const themes = [
   { id: "dark", icon: <FiMoon />, label: "Dark", color: "#9333ea" },
   { id: "light", icon: <FiSun />, label: "Light", color: "#f59e0b" },
   { id: "monochrome", icon: <FiGrid />, label: "OLED", color: "#ffffff" },
-  { id: "cyber", icon: <FiZap />, label: "Cyber", color: "#00ffff" },
   { id: "sakura", icon: <FiActivity />, label: "Sakura", color: "#ff4d94" },
   { id: "violet", icon: <FiDroplet />, label: "Violet", color: "#a855f7" },
-  { id: "midnight", icon: <FiActivity />, label: "Deepest", color: "#8b5cf6" },
   { id: "crimson", icon: <FiCommand />, label: "Crimson", color: "#dc2626" },
   { id: "mint", icon: <FiTarget />, label: "Neo Mint", color: "#10b981" },
-  { id: "royal", icon: <FiActivity />, label: "Royal Gold", color: "#d4af37" },
-  { id: "nordic", icon: <FiDroplet />, label: "Nordic", color: "#64748b" },
+
   { id: "mocha", icon: <FiActivity />, label: "Mocha", color: "#92400e" },
   { id: "candy", icon: <FiDroplet />, label: "Candy", color: "#ec4899" },
   { id: "ocean", icon: <FiGrid />, label: "Ocean", color: "#0ea5e9" },
-  { id: "forest", icon: <FiTarget />, label: "Forest", color: "#22c55e" },
   { id: "tropical", icon: <FiDroplet />, label: "Teal", color: "#14b8a6" },
   { id: "retro", icon: <FiZap />, label: "Retro", color: "#ff006e" },
 ];
@@ -85,8 +81,8 @@ export default function ThemeToggle() {
                   onClick={() => changeTheme(t.id)}
                   className={`
                     flex items-center gap-3 w-full px-3 py-2 rounded-xl text-xs font-semibold transition-all
-                    ${theme === t.id 
-                      ? 'bg-[var(--accent)] text-white' 
+                    ${theme === t.id
+                      ? 'bg-[var(--accent)] text-white'
                       : 'hover:bg-[var(--accent)]/10 text-[var(--foreground)]'}
                   `}
                 >

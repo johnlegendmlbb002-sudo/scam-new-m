@@ -86,96 +86,94 @@ export default function GameDetailPage() {
   };
 
   return (
-    <section className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-6">
-
-      {/* ================= MODERN GAME SWITCHER ================= */}
-      <div className="max-w-6xl mx-auto mb-10 overflow-hidden">
-        <div className="flex items-center gap-2 overflow-x-auto py-4 no-scrollbar scroll-smooth">
-          {allGames.map((g) => {
-            const isActive = g.gameSlug === slug;
-            return (
-              <button
-                key={g.gameSlug}
-                onClick={() => router.push(`/games/${g.gameSlug}`)}
-                className={`
-                  relative flex-shrink-0 flex items-center gap-3 px-4 py-2 rounded-2xl transition-all duration-300
-                  ${isActive
-                    ? "bg-foreground/5 border border-foreground/10"
-                    : "hover:bg-foreground/5 border border-transparent"}
-                `}
-              >
-                {/* THUMBNAIL */}
-                <div className={`
-                  relative w-10 h-10 rounded-xl overflow-hidden transition-all duration-500
-                  ${isActive ? "shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/50" : "grayscale opacity-40 group-hover:grayscale-0"}
-                `}>
-                  <Image
-                    src={g.gameImageId?.image || logo}
-                    alt={g.gameName}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-
-                {/* LABEL */}
-                <div className="flex flex-col items-start pr-2">
-                  <span className={`
-                    text-[10px] font-black italic uppercase tracking-wider transition-colors duration-300
-                    ${isActive ? "text-foreground" : "text-muted group-hover:text-foreground"}
-                  `}>
-                    {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
-                  </span>
-                  {isActive && (
-                    <span
-                      className="text-[8px] font-black uppercase tracking-[0.2em] text-amber-500 mt-0.5"
-                    >
-                      Active
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
+    <section className="min-h-screen bg-[var(--background)] px-4 py-8">
+      <div className="max-w-4xl mx-auto space-y-10">
+        
+        {/* 🎮 SELECT GAME - COMPACT & VERTICAL LABELS */}
+        <div className="flex flex-col gap-4">
+           <div className="flex items-center gap-2 px-1">
+              <div className="w-1 h-3 bg-[var(--accent)] rounded-full" />
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">Game Switch</h2>
+           </div>
+           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2">
+             {allGames.map((g) => {
+               const isActive = g.gameSlug === slug;
+               return (
+                 <button
+                   key={g.gameSlug}
+                   onClick={() => router.push(`/games/${g.gameSlug}`)}
+                   className={`
+                     flex items-center gap-2 flex-shrink-0 px-3 py-1.5 rounded-xl border transition-all duration-300 group
+                     ${isActive ? "bg-[var(--accent)]/10 border-[var(--accent)] shadow-sm" : "bg-[var(--card)]/50 border-[var(--border)] opacity-60 hover:opacity-100"}
+                   `}
+                 >
+                   <div className="relative w-6 h-6 rounded-md overflow-hidden flex-shrink-0">
+                     <Image
+                       src={g.gameImageId?.image || logo}
+                       alt={g.gameName}
+                       fill
+                       className="object-cover"
+                     />
+                   </div>
+                   <span className={`
+                      text-[8px] font-black uppercase tracking-widest whitespace-nowrap
+                      ${isActive ? "text-[var(--accent)]" : "text-[var(--muted)] group-hover:text-[var(--foreground)]"}
+                   `}>
+                      {g.gameName === "PUBG Mobile" ? "BGMI" : g.gameName}
+                   </span>
+                 </button>
+               );
+             })}
+           </div>
         </div>
+
+        {/* 🏆 GAME HEADING - ULTRA COMPACT */}
+        <div className="flex items-center gap-4 py-2 px-1">
+           <div className="w-16 h-16 md:w-20 md:h-20 relative rounded-xl overflow-hidden shadow-lg border border-[var(--border)] flex-shrink-0">
+             <Image
+               src={game?.gameImageId?.image || logo}
+               alt={game?.gameName || "Game"}
+               fill
+               priority
+               className="object-cover"
+             />
+           </div>
+
+           <div className="flex flex-col">
+              <h1 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none mb-1">
+                {isBGMI ? "BGMI" : game?.gameName}
+              </h1>
+              <div className="flex items-center gap-2">
+                 <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">
+                    {game?.gameFrom}
+                 </span>
+                 <div className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-30" />
+                 <span className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest">
+                    Verified
+                 </span>
+              </div>
+           </div>
+        </div>
+
+        {/* 📦 CONTENT GRID */}
+        <div className="space-y-8">
+           <ItemGrid
+             items={game.allItems}
+             activeItem={activeItem}
+             setActiveItem={setActiveItem}
+             buyPanelRef={buyPanelRef}
+           />
+
+           <BuyPanel
+             activeItem={activeItem}
+             onBuy={goBuy}
+             redirecting={redirecting}
+             buyPanelRef={buyPanelRef}
+           />
+        </div>
+
       </div>
-
-      {/* ================= HEADER ================= */}
-      <div className="max-w-6xl mx-auto mb-6 flex items-center gap-4">
-        <div className="w-14 h-14 relative rounded-lg overflow-hidden">
-          <Image
-            src={game?.gameImageId?.image || logo}
-            alt={game?.gameName || "Game"}
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        <div>
-          <h1 className="text-2xl font-extrabold">
-            {isBGMI ? "BGMI" : game?.gameName}
-          </h1>
-          <p className="text-xs text-[var(--muted)]">
-            {game?.gameFrom}
-          </p>
-        </div>
-      </div>
-
-      {/* ================= ITEM GRID ================= */}
-      <ItemGrid
-        items={game.allItems}
-        activeItem={activeItem}
-        setActiveItem={setActiveItem}
-        buyPanelRef={buyPanelRef}
-      />
-
-      {/* ================= BUY PANEL ================= */}
-      <BuyPanel
-        activeItem={activeItem}
-        onBuy={goBuy}
-        redirecting={redirecting}
-        buyPanelRef={buyPanelRef}
-      />
-
     </section>
   );
 }
+
