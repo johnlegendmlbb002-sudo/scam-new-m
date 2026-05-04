@@ -51,7 +51,7 @@ export default function AuthPage() {
   });
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[var(--background)] px-4">
+    <section className="relative min-h-screen w-full flex items-start justify-center overflow-hidden bg-[var(--background)] px-4 pt-[12vh]">
       {/* ================= SIMPLE PREMIUM BACKGROUND ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Soft, Static Mesh Gradient */}
@@ -67,14 +67,7 @@ export default function AuthPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="
-          relative z-10 w-full max-w-md
-          rounded-[2rem]
-          bg-[var(--card)]/40 backdrop-blur-xl
-          border border-[var(--border)]
-          shadow-[0_8px_32px_rgba(0,0,0,0.12)]
-          overflow-hidden
-        "
+        className="relative z-10 w-full max-w-md overflow-hidden"
       >
         <div className="p-10 md:p-12 flex flex-col items-center text-center">
 
@@ -85,12 +78,12 @@ export default function AuthPage() {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <div className="relative w-20 h-20 rounded-2xl bg-[var(--background)] border border-[var(--border)] p-4 flex items-center justify-center shadow-sm">
+            <div className="relative w-14 h-14 rounded-xl bg-[var(--background)] border border-[var(--border)] p-3 flex items-center justify-center shadow-sm">
               <Image
                 src={logo}
                 alt="Logo"
                 fill
-                className="object-contain p-4"
+                className="object-contain p-2.5"
               />
             </div>
           </motion.div>
@@ -192,7 +185,7 @@ export default function AuthPage() {
                 <div className="w-full border-t border-[var(--border)] opacity-30"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[var(--card)]/80 px-4 text-[10px] tracking-widest font-bold uppercase text-[var(--muted)]/60">
+                <span className="bg-[var(--background)] px-4 text-[10px] tracking-widest font-bold uppercase text-[var(--muted)]/60">
                   Secure Portal
                 </span>
               </div>

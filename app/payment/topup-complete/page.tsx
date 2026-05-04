@@ -17,12 +17,14 @@ import { useRouter } from "next/navigation";
 export default function TopupComplete() {
   const [status, setStatus] = useState("checking"); // checking | success | failed
   const [message, setMessage] = useState("Checking Payment");
+  const [orderId, setOrderId] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const orderId = localStorage.getItem("pending_topup_order");
+    const id = localStorage.getItem("pending_topup_order");
+    setOrderId(id || "");
 
-    if (!orderId) {
+    if (!id) {
       setStatus("failed");
       setMessage("Order Not Found");
       return;
@@ -38,7 +40,7 @@ export default function TopupComplete() {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ orderId }),
+          body: JSON.stringify({ orderId: id }),
         });
 
         const data = await res.json();
@@ -63,7 +65,7 @@ export default function TopupComplete() {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] relative flex items-center justify-center bg-[var(--background)] px-6 overflow-hidden">
+    <div className="min-h-[100dvh] relative flex items-start justify-center bg-[var(--background)] px-6 pt-[12vh] overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--accent)]/10 blur-[120px] rounded-full animate-pulse" />
@@ -76,26 +78,8 @@ export default function TopupComplete() {
         className="w-full max-w-[380px] relative z-10"
       >
         <div className="relative group">
-          {/* Tactical Border Effect */}
-          <div className="absolute -inset-[1px] bg-gradient-to-b from-foreground/10 via-transparent to-foreground/5 rounded-3xl" />
+          <div className="relative overflow-hidden">
 
-          <div className="relative bg-card/30 backdrop-blur-3xl border border-white/5 rounded-3xl p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden">
-            {/* Top Status Bar */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] overflow-hidden">
-              <motion.div
-                className={`h-full ${status === 'success' ? 'bg-green-500' :
-                    status === 'failed' ? 'bg-red-500' :
-                      'bg-[var(--accent)]'
-                  }`}
-                initial={{ x: "-100%" }}
-                animate={{ x: status === 'checking' ? ["-100%", "100%"] : "0%" }}
-                transition={{
-                  duration: status === 'checking' ? 1.5 : 0.5,
-                  repeat: status === 'checking' ? Infinity : 0,
-                  ease: "easeInOut"
-                }}
-              />
-            </div>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -107,13 +91,13 @@ export default function TopupComplete() {
                 className="flex flex-col items-center text-center"
               >
                 {/* Icon Section */}
-                <div className="relative mb-6">
+                <div className="relative mb-4">
                   <motion.div
                     initial={{ rotate: -45, opacity: 0 }}
                     animate={{ rotate: 0, opacity: 1 }}
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center relative z-10 ${status === 'success' ? 'bg-green-500/20 text-green-500 border border-green-500/30' :
-                        status === 'failed' ? 'bg-red-500/20 text-red-500 border border-red-500/30' :
-                          'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20'
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 ${status === 'success' ? 'bg-green-500/20 text-green-500 border border-green-500/30' :
+                      status === 'failed' ? 'bg-red-500/20 text-red-500 border border-red-500/30' :
+                        'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20'
                       }`}
                   >
                     {status === 'checking' && <FiLoader className="text-2xl animate-spin" />}
@@ -123,19 +107,19 @@ export default function TopupComplete() {
 
                   {/* Outer Glow */}
                   <div className={`absolute inset-0 blur-2xl opacity-20 -z-0 ${status === 'success' ? 'bg-green-500' :
-                      status === 'failed' ? 'bg-red-500' :
-                        'bg-[var(--accent)]'
+                    status === 'failed' ? 'bg-red-500' :
+                      'bg-[var(--accent)]'
                     }`} />
                 </div>
 
                 {/* Content Section */}
-                <div className="space-y-2 mb-8">
+                <div className="space-y-2 mb-6">
                   <div className="flex items-center justify-center gap-1.5 opacity-40">
                     <span className={`w-1.5 h-1.5 rounded-full ${status === 'success' ? 'bg-green-500' :
-                        status === 'failed' ? 'bg-red-500' :
-                          'bg-amber-500 animate-pulse'
+                      status === 'failed' ? 'bg-red-500' :
+                        'bg-amber-500 animate-pulse'
                       }`} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Transaction ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Order ID: {orderId || 'N/A'}</span>
                   </div>
 
                   <h1 className="text-2xl font-black uppercase tracking-tight text-foreground italic">
@@ -150,12 +134,12 @@ export default function TopupComplete() {
                 </div>
 
                 {/* Actions */}
-                <div className="w-full space-y-3">
+                <div className="w-full space-y-2">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => router.push("/")}
-                    className="w-full h-12 bg-foreground text-background rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 group transition-colors hover:bg-[var(--accent)] hover:text-white"
+                    className="w-full h-10 bg-foreground text-background rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 group transition-colors hover:bg-[var(--accent)] hover:text-white"
                   >
                     <FiHome size={14} />
                     Back Home
@@ -168,7 +152,7 @@ export default function TopupComplete() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => window.location.reload()}
-                        className="w-full h-12 bg-white/5 border border-white/5 text-foreground rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-colors hover:bg-white/10"
+                        className="w-full h-10 bg-white/5 border border-white/5 text-foreground rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-colors hover:bg-white/10"
                       >
                         <FiRefreshCw size={14} />
                         Retry Verification
@@ -178,7 +162,7 @@ export default function TopupComplete() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => window.open(process.env.NEXT_PUBLIC_WHATSAPP_URL, "_blank")}
-                        className="w-full h-12 bg-green-500/10 border border-green-500/20 text-green-500 rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-colors hover:bg-green-500/20"
+                        className="w-full h-10 bg-green-500/10 border border-green-500/20 text-green-500 rounded-xl font-bold text-[11px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-colors hover:bg-green-500/20"
                       >
                         <FiMessageSquare size={14} />
                         Contact Support
