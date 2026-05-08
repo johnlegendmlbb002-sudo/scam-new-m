@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
-import { FiPlus, FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX } from "react-icons/fi";
+import { FiChevronDown, FiUser, FiLayout, FiSettings, FiLifeBuoy, FiLogOut, FiBarChart2, FiHome, FiGrid, FiLayers, FiGlobe, FiX } from "react-icons/fi";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 
@@ -148,10 +148,10 @@ export default function Header() {
               <Image
                 src={logo}
                 alt="Logo"
-                width={65}
-                height={20}
+                width={58}
+                height={16}
                 priority
-                className="object-contain -ml-2"
+                className="object-contain ml-1"
               />
             </motion.div>
             <div className="absolute -inset-2 bg-[var(--accent)]/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity blur-md" />
@@ -183,17 +183,7 @@ export default function Header() {
 
         {/* ACTIONS SECTION */}
         <div className="flex items-center gap-3 sm:gap-4" ref={dropdownRef}>
-          {user && (
-            <Link
-              href="/dashboard/wallet"
-              className="flex items-center gap-1 bg-[var(--accent)]/10 border border-[var(--accent)]/30 px-2 py-1 rounded-full hover:bg-[var(--accent)]/20 transition-all group shrink-0 shadow-sm"
-            >
-              <div className="w-4 h-4 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
-                <FiPlus className="text-[var(--accent)] text-[8px]" />
-              </div>
-              <span className="text-[12px] font-bold text-[var(--accent)]">₹{user.wallet?.toFixed(1) || "0.0"}</span>
-            </Link>
-          )}
+
 
           <ThemeToggle />
 
@@ -208,7 +198,7 @@ export default function Header() {
                 }
               }}
               className={`
-                flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300
+                flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 mr-2
                 ${userMenuOpen ? 'bg-[var(--accent)] ring-2 ring-[var(--accent)]/50' : 'hover:bg-[var(--card)]/50 border border-transparent hover:border-[var(--border)]'}
               `}
               whileHover={{ y: -1 }}
@@ -219,8 +209,8 @@ export default function Header() {
                   <Image
                     src={user.avatar}
                     alt="User Avatar"
-                    width={28}
-                    height={28}
+                    width={36}
+                    height={36}
                     className="object-cover w-full h-full"
                     onError={() => setAvatarError(true)}
                   />
@@ -256,8 +246,8 @@ export default function Header() {
                     {/* 🔝 TOP HEADER */}
                     <div className="px-5 py-4 flex items-center justify-between border-b border-[var(--border)] relative z-10 bg-[var(--background)]">
                       <div className="flex items-center gap-2">
-                         <div className="w-1 h-3 bg-[var(--accent)] rounded-full" />
-                         <h2 className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]">Menu</h2>
+                        <div className="w-1 h-3 bg-[var(--accent)] rounded-full" />
+                        <h2 className="text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]">Menu</h2>
                       </div>
                       <button
                         onClick={() => setUserMenuOpen(false)}
@@ -274,14 +264,14 @@ export default function Header() {
                             <FiUser className="text-3xl text-[var(--accent)]" />
                           </div>
                           <h3 className="text-xl font-black italic uppercase text-[var(--foreground)] mb-1">
-                             Hi, <span className="text-[var(--accent)]">Guest</span>
+                            Hi, <span className="text-[var(--accent)]">Guest</span>
                           </h3>
                           <p className="text-[9px] text-[var(--muted)] font-bold uppercase tracking-widest mb-6">
-                             Login to manage your wallet.
+                            Login to manage your wallet.
                           </p>
                           <Link href="/login" onClick={() => setUserMenuOpen(false)} className="w-full">
                             <button className="w-full py-3 bg-[var(--accent)] text-black font-black uppercase tracking-widest text-[10px] rounded-xl">
-                               Login
+                              Login
                             </button>
                           </Link>
                         </div>
@@ -289,48 +279,48 @@ export default function Header() {
                         <div className="space-y-6">
                           {/* 👤 USER PROFILE */}
                           <div className="flex items-center gap-3 bg-[var(--card)] border border-[var(--border)] p-3 rounded-2xl">
-                             <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--background)] border border-[var(--border)]">
-                                {user?.avatar && !avatarError ? (
-                                  <Image
-                                    src={user.avatar}
-                                    alt="Avatar"
-                                    width={40}
-                                    height={40}
-                                    className="object-cover w-full h-full"
-                                    onError={() => setAvatarError(true)}
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-[var(--accent)]">
-                                    <span className="text-white text-sm font-black">
-                                      {(user.name || user.username || "U")[0]}
-                                    </span>
-                                  </div>
-                                )}
-                             </div>
-                             <div className="flex flex-col flex-1 min-w-0">
-                                <span className="text-sm font-black italic uppercase text-[var(--foreground)] truncate">
-                                   {user.name || user.username}
-                                </span>
-                             </div>
-                             <button
-                               onClick={handleLogout}
-                               className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center"
-                             >
-                                <FiLogOut size={14} />
-                             </button>
+                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--background)] border border-[var(--border)]">
+                              {user?.avatar && !avatarError ? (
+                                <Image
+                                  src={user.avatar}
+                                  alt="Avatar"
+                                  width={40}
+                                  height={40}
+                                  className="object-cover w-full h-full"
+                                  onError={() => setAvatarError(true)}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-[var(--accent)]">
+                                  <span className="text-white text-sm font-black">
+                                    {(user.name || user.username || "U")[0]}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex flex-col flex-1 min-w-0">
+                              <span className="text-sm font-black italic uppercase text-[var(--foreground)] truncate">
+                                {user.name || user.username}
+                              </span>
+                            </div>
+                            <button
+                              onClick={handleLogout}
+                              className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center"
+                            >
+                              <FiLogOut size={14} />
+                            </button>
                           </div>
 
                           {/* 💳 WALLET */}
                           <div className="bg-[var(--accent)] p-4 rounded-2xl">
-                             <p className="text-[8px] font-black uppercase tracking-widest text-black/50 mb-0.5">Balance</p>
-                             <div className="flex items-center justify-between">
-                                <span className="text-2xl font-black italic text-black">₹{user.wallet?.toFixed(1) || "0.0"}</span>
-                                <Link href="/dashboard/wallet" onClick={() => setUserMenuOpen(false)}>
-                                   <button className="px-3 py-1.5 bg-black text-white text-[8px] font-black uppercase tracking-widest rounded-lg">
-                                      Top Up
-                                   </button>
-                                </Link>
-                             </div>
+                            <p className="text-[8px] font-black uppercase tracking-widest text-black/50 mb-0.5">Balance</p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-2xl font-black italic text-black">₹{user.wallet?.toFixed(1) || "0.0"}</span>
+                              <Link href="/dashboard/wallet" onClick={() => setUserMenuOpen(false)}>
+                                <button className="px-3 py-1.5 bg-black text-white text-[8px] font-black uppercase tracking-widest rounded-lg">
+                                  Top Up
+                                </button>
+                              </Link>
+                            </div>
                           </div>
 
                           {/* 🧭 LINKS */}
@@ -354,20 +344,20 @@ export default function Header() {
                           {user.userType === "owner" && (
                             <Link href="/owner-panal" onClick={() => setUserMenuOpen(false)}>
                               <div className="p-3 rounded-xl bg-black border border-white/5 flex items-center justify-between hover:border-[var(--accent)] transition-all">
-                                 <div className="flex items-center gap-2">
-                                    <FiSettings size={12} className="text-[var(--accent)]" />
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-white">Admin Panel</span>
-                                 </div>
+                                <div className="flex items-center gap-2">
+                                  <FiSettings size={12} className="text-[var(--accent)]" />
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-white">Admin Panel</span>
+                                </div>
                               </div>
                             </Link>
                           )}
                         </div>
                       )}
                     </div>
-                    
+
                     {/* 🏁 FOOTER */}
                     <div className="p-4 border-t border-[var(--border)] text-center">
-                       <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">Scammer Store © 2026</p>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">Scammer Store © 2026</p>
                     </div>
                   </motion.div>
                 </>

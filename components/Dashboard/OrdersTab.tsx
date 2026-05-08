@@ -77,7 +77,7 @@ export default function OrdersTab() {
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--foreground)]">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--foreground)]">
               My <span className="text-[var(--accent)]">Orders</span>
             </h2>
             <p className="text-xs sm:text-sm text-[var(--muted)] max-w-xl">
@@ -104,7 +104,7 @@ export default function OrdersTab() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search orders..."
-            className="w-full pl-11 pr-4 py-4 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-md
+            className="w-full pl-11 pr-4 py-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 backdrop-blur-md
                            focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all 
                            text-sm font-medium placeholder:text-[var(--muted)]/50 tracking-tight"
           />
@@ -127,7 +127,7 @@ export default function OrdersTab() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-center py-16 rounded-3xl border border-dashed border-[var(--border)] bg-[var(--card)]/10"
+            className="text-center py-10 rounded-3xl border border-dashed border-[var(--border)] bg-[var(--card)]/10"
           >
             <div className="w-16 h-16 rounded-full bg-[var(--muted)]/5 flex items-center justify-center mx-auto mb-4">
               <FiPackage className="text-3xl text-[var(--muted)] opacity-20" />
@@ -163,7 +163,7 @@ export default function OrdersTab() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-12 flex justify-center items-center gap-3"
+                className="mt-8 flex justify-center items-center gap-3"
               >
                 <button
                   disabled={page === 1}
@@ -200,7 +200,7 @@ export default function OrdersTab() {
             )}
 
             {/* INFO BANNER */}
-            <div className="mt-8 p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center gap-4 group overflow-hidden relative">
+            <div className="mt-6 p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center gap-4 group overflow-hidden relative">
               <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-lg">
                 <FiZap />
               </div>

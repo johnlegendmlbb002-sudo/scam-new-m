@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
+import Image from "next/image";
 
 export default function ItemGridBgmi({
   items,
+  gameLogo,
   activeItem,
   setActiveItem,
   buyPanelRef,
@@ -47,7 +49,7 @@ export default function ItemGridBgmi({
             className={`
               relative overflow-hidden group
               rounded-xl border transition-all duration-300
-              flex flex-col justify-between min-h-[90px] p-3.5 cursor-pointer
+               flex flex-col justify-between min-h-[80px] p-2.5 cursor-pointer
               ${isSelected
                 ? "border-[var(--accent)] bg-[var(--accent)]/15 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
                 : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40 hover:bg-[var(--card)]/60"
@@ -65,12 +67,22 @@ export default function ItemGridBgmi({
               />
             )}
 
+            {/* Background Watermark Logo */}
+            <div className="absolute -right-2 -bottom-2 w-16 h-16 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 transition-all duration-700">
+               <Image src={item.itemImageId?.image || gameLogo} alt="" fill className="object-contain" />
+            </div>
+
             {/* Header: Name & Discount */}
-            <div className="relative z-10 flex flex-col gap-1">
-              <div className="flex justify-between gap-2">
-                <p className={`font-bold text-[11px] tracking-tight leading-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
-                  {item.itemName}
-                </p>
+            <div className="relative z-10 flex flex-col gap-0.5">
+              <div className="flex justify-between gap-1.5">
+                <div className="flex items-center gap-1.5">
+                   <div className="w-5 h-5 relative rounded-md overflow-hidden flex-shrink-0 border border-[var(--border)]">
+                      <Image src={item.itemImageId?.image || gameLogo} alt="logo" fill className="object-cover" />
+                   </div>
+                   <p className={`font-bold text-[11px] tracking-tight leading-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
+                     {item.itemName}
+                   </p>
+                </div>
                 {discount > 0 && (
                   <span className="text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0 leading-none h-4 flex items-center rounded-full uppercase tracking-tighter shadow-sm">
                     {discount}%
@@ -96,7 +108,7 @@ export default function ItemGridBgmi({
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-1">
                   <span className="text-[10px] font-medium text-[var(--muted)]">₹</span>
-                  <p className="text-lg font-black text-[var(--foreground)] tracking-tight">
+                  <p className="text-base font-black text-[var(--foreground)] tracking-tight">
                     {item.sellingPrice}
                   </p>
                 </div>

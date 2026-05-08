@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
+import Image from "next/image";
 
 export default function ItemGrid({
   items,
+  gameLogo,
   activeItem,
   setActiveItem,
   buyPanelRef,
@@ -48,7 +50,7 @@ export default function ItemGrid({
             className={`
               relative overflow-hidden group
               rounded-2xl border transition-all duration-300
-              flex flex-col justify-between min-h-[100px] p-4 cursor-pointer
+               flex flex-col justify-between min-h-[85px] p-3 cursor-pointer
               ${isSelected
                 ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-[0_0_20px_rgba(var(--accent-rgb),0.1)]"
                 : "border-[var(--border)] bg-[var(--card)]/40 hover:border-[var(--accent)]/40"
@@ -56,6 +58,11 @@ export default function ItemGrid({
               ${item.itemAvailablity === false ? "opacity-40 grayscale cursor-not-allowed" : "cursor-pointer"}
             `}
           >
+            {/* Background Watermark Logo */}
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 opacity-[0.03] grayscale pointer-events-none group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-700">
+               <Image src={item.itemImageId?.image || gameLogo} alt="" fill className="object-contain" />
+            </div>
+
             {item.itemAvailablity === false && (
               <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
                 <span className="bg-red-500 text-white text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full shadow-lg">
@@ -64,13 +71,23 @@ export default function ItemGrid({
               </div>
             )}
             {/* Header: Name & Discount */}
-            <div className="relative z-10 flex flex-col gap-2">
-              <div className="flex justify-between items-start gap-2">
-                <p className={`font-black italic uppercase text-[12px] tracking-tight leading-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
-                  {item.itemName}
-                </p>
+            <div className="relative z-10 flex flex-col gap-1.5">
+              <div className="flex justify-between items-start gap-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-5 h-5 relative rounded-lg overflow-hidden flex-shrink-0 border border-[var(--border)] shadow-sm">
+                    <Image
+                      src={item.itemImageId?.image || gameLogo}
+                      alt="logo"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <p className={`font-black italic uppercase text-[12px] tracking-tight leading-tight transition-colors duration-300 ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
+                    {item.itemName}
+                  </p>
+                </div>
                 {discount > 0 && (
-                  <span className="text-[9px] font-black bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 px-2 py-0.5 rounded-full uppercase tracking-widest">
+                  <span className="text-[9px] font-black bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20 px-1.5 py-0.5 rounded-full uppercase tracking-widest">
                     {discount}%
                   </span>
                 )}
@@ -93,7 +110,7 @@ export default function ItemGrid({
             {/* Price */}
             <div className="relative z-10 flex items-baseline gap-1 mt-auto">
               <span className={`text-[10px] font-black uppercase ${isSelected ? 'text-[var(--accent)]/50' : 'text-[var(--muted)]'}`}>₹</span>
-              <p className={`text-2xl font-black italic tracking-tighter ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
+              <p className={`text-xl font-black italic tracking-tighter ${isSelected ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
                 {item.sellingPrice}
               </p>
             </div>

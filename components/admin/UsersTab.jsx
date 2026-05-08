@@ -299,18 +299,20 @@ export default function UsersTab() {
                   onClick={() => setSelectedUser(u)}
                   className="p-5 rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] active:bg-[var(--foreground)]/[0.04] transition-all relative"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                    <div className="flex items-center gap-3 min-w-0">
                       <Avatar user={u} />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="font-semibold text-[var(--foreground)] text-sm truncate">{u.name}</p>
                         <p className="text-[11px] text-[var(--muted)]/60 font-mono truncate">{u.userId}</p>
                       </div>
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border text-[10px] font-semibold capitalize ${getRoleClass(u.userType)}`}>
-                      {getRoleIcon(u.userType)}
-                      {u.userType}
-                    </span>
+                    <div className="flex justify-start sm:justify-end shrink-0">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-semibold capitalize ${getRoleClass(u.userType)}`}>
+                        {getRoleIcon(u.userType)}
+                        {u.userType}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-3">
@@ -327,12 +329,13 @@ export default function UsersTab() {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 pt-1" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-2 text-[var(--muted)]/60">
-                        <Calendar size={12} />
-                        <span className="text-xs">{new Date(u.createdAt).toLocaleDateString()}</span>
-                      </div>
+                  <div className="flex flex-col min-[450px]:flex-row items-stretch min-[450px]:items-center justify-between gap-3 pt-2 border-t border-[var(--border)]/50" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center gap-2 text-[var(--muted)]/60">
+                      <Calendar size={12} />
+                      <span className="text-xs">{new Date(u.createdAt).toLocaleDateString()}</span>
+                    </div>
 
+                    <div className="w-full min-[450px]:w-auto">
                       <RoleDropdown
                         value={u.userType}
                         compact
@@ -340,6 +343,7 @@ export default function UsersTab() {
                         onChange={(v) => changeUserRole(u.userId, v)}
                       />
                     </div>
+                  </div>
                   </div>
                 </motion.div>
               ))}
@@ -601,8 +605,8 @@ function RoleDropdown({ value, onChange, disabled, compact }) {
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          flex items-center justify-between gap-3 px-5
-          ${compact ? "h-9 min-w-[110px]" : "h-11 min-w-[130px] w-full"}
+          flex items-center justify-between gap-3 px-4
+          ${compact ? "h-9 w-full sm:min-w-[110px] sm:w-auto" : "h-11 min-w-[130px] w-full"}
           rounded-full border border-[var(--border)] bg-[var(--foreground)]/[0.03]
           text-xs font-semibold transition-all outline-none
           ${disabled ? "opacity-40 cursor-not-allowed" : "hover:bg-[var(--foreground)]/[0.06]"}

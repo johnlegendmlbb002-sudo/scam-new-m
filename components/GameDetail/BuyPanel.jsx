@@ -10,6 +10,10 @@ export default function BuyPanel({
   redirecting,
   buyPanelRef,
 }) {
+  const discount = activeItem.dummyPrice
+    ? Math.round(((activeItem.dummyPrice - activeItem.sellingPrice) / activeItem.dummyPrice) * 100)
+    : 0;
+
   return (
     <motion.div
       ref={buyPanelRef}
@@ -34,10 +38,13 @@ export default function BuyPanel({
         </div>
 
         <div className="flex-1 min-w-0 space-y-2">
-          <div className="flex items-center gap-2 mb-1">
-             <FiShield className="text-[var(--accent)]" size={12} />
-             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--muted)]">Secured Purchase</span>
-          </div>
+          {discount > 0 && (
+            <div className="flex items-center gap-2 mb-1">
+               <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--accent)]">
+                  {discount}% OFF
+               </span>
+            </div>
+          )}
           
           <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter leading-none text-[var(--foreground)]">
             {activeItem.itemName}

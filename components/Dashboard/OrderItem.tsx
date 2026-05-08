@@ -77,12 +77,12 @@ export default function OrderItem({ order }: { order: OrderType }) {
         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 blur-[50px] -mr-16 -mt-16 group-hover:bg-[var(--accent)]/10 transition-colors" />
 
         {/* COMPACT VIEW */}
-        <div className="px-4 py-3 sm:px-5">
+        <div className="px-4 py-2.5 sm:px-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
-                <FiPackage className="text-base" />
+              <div className="h-8 w-8 rounded-xl bg-[var(--accent)]/5 border border-[var(--border)] flex items-center justify-center text-[var(--accent)] transition-all">
+                <FiPackage className="text-sm" />
               </div>
               <div>
                 <span className="text-[10px] font-mono text-[var(--foreground)] opacity-50 block mb-0.5">#{order.orderId}</span>
@@ -97,7 +97,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
                 <div className="flex items-center justify-end gap-1 text-[8px] font-medium text-[var(--muted)] mb-0.5 uppercase">
                   <FiCalendar /> {new Date(order.createdAt).toLocaleDateString()}
                 </div>
-                <div className="text-sm font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
+                <div className="text-xs font-bold text-[var(--foreground)]">₹{order.price.toFixed(2)}</div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -172,7 +172,7 @@ export default function OrderItem({ order }: { order: OrderType }) {
 
 function DetailBox({ label, value, icon, mono }: { label: string, value: string, icon: any, mono?: boolean }) {
   return (
-    <div className="p-2 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all">
+    <div className="p-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--accent)]/30 transition-all">
       <div className="flex items-center gap-2 mb-0.5 text-[var(--muted)]">
         <div className="text-[10px]">{icon}</div>
         <span className="text-[7px] font-black uppercase tracking-widest">{label}</span>

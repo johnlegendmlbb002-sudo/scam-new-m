@@ -129,7 +129,7 @@ export default function GameDetailPage() {
 
         {/* 🏆 GAME HEADING - ULTRA COMPACT */}
         <div className="flex items-center gap-4 py-2 px-1">
-           <div className="w-16 h-16 md:w-20 md:h-20 relative rounded-xl overflow-hidden shadow-lg border border-[var(--border)] flex-shrink-0">
+           <div className="w-12 h-12 md:w-14 md:h-14 relative rounded-xl overflow-hidden shadow-lg border border-[var(--border)] flex-shrink-0">
              <Image
                src={game?.gameImageId?.image || logo}
                alt={game?.gameName || "Game"}
@@ -144,14 +144,10 @@ export default function GameDetailPage() {
                 {isBGMI ? "BGMI" : game?.gameName}
               </h1>
               <div className="flex items-center gap-2">
-                 <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">
-                    {game?.gameFrom}
-                 </span>
-                 <div className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-30" />
-                 <span className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest">
-                    Verified
-                 </span>
-              </div>
+                  <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-widest opacity-60">
+                     {game?.gameFrom}
+                  </span>
+               </div>
            </div>
         </div>
 
@@ -159,6 +155,7 @@ export default function GameDetailPage() {
         <div className="space-y-8">
            <ItemGrid
              items={game.allItems}
+             gameLogo={game?.gameImageId?.image || logo}
              activeItem={activeItem}
              setActiveItem={setActiveItem}
              buyPanelRef={buyPanelRef}

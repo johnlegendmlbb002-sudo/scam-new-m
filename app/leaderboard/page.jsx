@@ -65,11 +65,11 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[var(--background)] py-10 px-4 relative overflow-hidden">
+      <div className="min-h-screen bg-[var(--background)] py-6 px-4 relative overflow-hidden">
         {/* AMBIENT BACKGROUND */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] opacity-[0.03] pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto relative z-10 space-y-8">
+        <div className="max-w-4xl mx-auto relative z-10 space-y-6">
 
           {/* SIMPLE HEADER */}
           <div className="text-center space-y-4">
@@ -82,7 +82,7 @@ export default function LeaderboardPage() {
                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--accent)]">Top Rankings</span>
              </motion.div>
              
-             <h1 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
+             <h1 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-[var(--foreground)] leading-none">
                 Top <span className="text-[var(--accent)]">Spenders</span>
              </h1>
              
@@ -97,7 +97,7 @@ export default function LeaderboardPage() {
                     <button
                       key={r.id}
                       onClick={() => setRange(r.id)}
-                      className={`relative px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${range === r.id ? "text-black" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
+                      className={`relative px-5 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all duration-500 ${range === r.id ? "text-black" : "text-[var(--muted)] hover:text-[var(--foreground)]"}`}
                     >
                       <span className="relative z-10">{r.label}</span>
                       {range === r.id && (
@@ -124,7 +124,7 @@ export default function LeaderboardPage() {
                <p className="text-xs font-black uppercase tracking-widest text-[var(--muted)]">No data detected in current range</p>
             </div>
           ) : (
-            <div className="space-y-10">
+            <div className="space-y-6">
 
               {/* PODIUM SECTION */}
               <div className="grid grid-cols-3 gap-2 sm:gap-6 items-end">
@@ -163,10 +163,10 @@ export default function LeaderboardPage() {
                       <motion.div
                         key={index}
                         variants={itemVariants}
-                        className="group flex items-center justify-between p-3 bg-[var(--card)]/30 backdrop-blur-md border border-[var(--border)] rounded-2xl hover:border-[var(--accent)]/50 transition-all duration-500 shadow-sm"
+                        className="group flex items-center justify-between p-2 bg-[var(--card)]/30 backdrop-blur-md border border-[var(--border)] rounded-2xl hover:border-[var(--accent)]/50 transition-all duration-500 shadow-sm"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center text-[10px] font-black italic text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+                          <div className="w-7 h-7 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center text-[9px] font-black italic text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
                              #{rank}
                           </div>
                           <div className="flex flex-col">
@@ -204,7 +204,7 @@ function PodiumCard({ user, rank, style, isMain = false }) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5 }}
-      className={`relative group p-3 sm:p-4 rounded-3xl border ${style.border} ${style.bg} backdrop-blur-2xl transition-all duration-700 flex flex-col items-center text-center shadow-2xl ${isMain ? 'ring-1 ring-[var(--accent)]/20' : ''}`}
+      className={`relative group p-2.5 sm:p-3 rounded-3xl border ${style.border} ${style.bg} backdrop-blur-2xl transition-all duration-700 flex flex-col items-center text-center shadow-2xl ${isMain ? 'ring-1 ring-[var(--accent)]/20' : ''}`}
     >
       {/* GLOW EFFECT */}
       {isMain && (
@@ -212,8 +212,8 @@ function PodiumCard({ user, rank, style, isMain = false }) {
       )}
 
       {/* RANK ICON */}
-      <div className={`relative z-10 mb-2 w-10 h-10 sm:w-16 sm:h-16 rounded-2xl bg-black/40 border ${style.border} flex items-center justify-center ${style.color} group-hover:scale-110 transition-transform duration-700 shadow-inner`}>
-         <Icon size={isMain ? 32 : 24} className="drop-shadow-lg" />
+      <div className={`relative z-10 mb-2 w-9 h-9 sm:w-14 sm:h-14 rounded-2xl bg-black/40 border ${style.border} flex items-center justify-center ${style.color} group-hover:scale-110 transition-transform duration-700 shadow-inner`}>
+         <Icon size={isMain ? 28 : 20} className="drop-shadow-lg" />
          <div className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-black border border-inherit flex items-center justify-center text-[9px] sm:text-xs font-black italic text-white shadow-xl">
             #{rank}
          </div>
@@ -221,7 +221,7 @@ function PodiumCard({ user, rank, style, isMain = false }) {
 
       {/* USER DATA */}
       <div className="relative z-10 space-y-0.5 w-full overflow-hidden">
-         <h3 className={`font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate ${isMain ? 'text-base sm:text-xl' : 'text-[11px] sm:text-base'}`}>
+         <h3 className={`font-black italic uppercase tracking-tighter text-[var(--foreground)] truncate ${isMain ? 'text-sm sm:text-lg' : 'text-[10px] sm:text-base'}`}>
             {user.user?.name || "Player"}
          </h3>
          <p className="text-[7px] sm:text-[8px] font-black text-[var(--muted)] uppercase tracking-[0.2em] opacity-60">
@@ -231,7 +231,7 @@ function PodiumCard({ user, rank, style, isMain = false }) {
 
       <div className="relative z-10 w-full mt-2 pt-2 border-t border-white/5 flex flex-col gap-1">
          <span className="text-[7px] sm:text-[8px] font-black text-[var(--muted)] uppercase tracking-widest opacity-40">Spent</span>
-         <span className={`text-base sm:text-xl font-black italic tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
+         <span className={`text-sm sm:text-lg font-black italic tracking-tighter ${style.color}`}>₹{user.totalSpent}</span>
       </div>
       
       {/* CORNER ACCENTS */}
