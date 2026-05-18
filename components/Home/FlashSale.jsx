@@ -14,7 +14,7 @@ const flashSaleData = [
         image: "/game-assets/weekly-pass.jpeg",
         price: "₹150",
         originalPrice: "₹170",
-        slug: "mobile-legends988?type=weekly-pass",
+        slug: "mobile-legends270?type=weekly-pass",
         badge: "Hot Deal"
     },
     {
@@ -24,7 +24,7 @@ const flashSaleData = [
         image: "/game-assets/12.jpg",
         price: "₹81",
         originalPrice: "₹100",
-        slug: "weeklymonthly-bundle931",
+        slug: "weeklymonthly-bundle261",
         badge: "Best Value"
     },
 ];

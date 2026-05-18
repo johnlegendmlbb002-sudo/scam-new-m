@@ -115,7 +115,7 @@ export async function GET() {
       }
 
       // Replace Mobile Legends main image
-      if (updatedGame.gameSlug === "mobile-legends988") {
+      if (updatedGame.gameSlug === "mobile-legends270") {
         updatedGame.gameImageId = {
           ...updatedGame.gameImageId,
           image: MLBB_MAIN_IMAGE,
@@ -144,7 +144,7 @@ export async function GET() {
           image: MLBB_INDO_IMAGE,
         };
       }
-      if (updatedGame.gameSlug === "weeklymonthly-bundle931") {
+      if (updatedGame.gameSlug === "weeklymonthly-bundle261") {
         updatedGame.gameImageId = {
           ...updatedGame.gameImageId,
           image: MONTHLY_BUNDLE,
@@ -155,11 +155,11 @@ export async function GET() {
 
     /* ================= FILTER GAMES ================= */
     const ALLOWED_GAME_SLUGS = [
-      "mobile-legends988",
+      "mobile-legends270",
       "mlbb-double332",
       "mlbbglobal202",          // Global
       "mlbbtr112",
-      "mobile-legends-exclusive266",
+      "mobile-legends-exclusive952",
       "sgmy-mlbb893",
       "magic-chess-gogo-india924",
       "mlbb-indo42",
@@ -171,7 +171,7 @@ export async function GET() {
       "wuthering-of-waves464",
       "where-winds-meet280",
       "mlbb-smallphp980",
-      "weeklymonthly-bundle931"
+      "weeklymonthly-bundle261"
     ];
 
     const filteredGames =
@@ -195,7 +195,7 @@ export async function GET() {
 
     // Featured games
     const featuredGames = filteredGames.filter((g: any) =>
-      ["mobile-legends988", "pubg-mobile138"].includes(
+      ["mobile-legends270", "pubg-mobile138"].includes(
         g.gameSlug
       )
     );
